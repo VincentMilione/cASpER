@@ -27,7 +27,7 @@
         </entry>
         <entry key="$USER_HOME$/Desktop/CasperTest">
           <value>
-            <RecentProjectMetaInfo opened="true" projectWorkspaceId="1ZqVPcYivsHUfPDg1UsA6POQiJS">
+            <RecentProjectMetaInfo projectWorkspaceId="1ZqVPcYivsHUfPDg1UsA6POQiJS">
               <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
               <option name="build" value="IC-193.5233.102" />
               <option name="buildTimestamp" value="1574898451092" />
@@ -37,11 +37,23 @@
             </RecentProjectMetaInfo>
           </value>
         </entry>
+        <entry key="D:/Universita/project/GradleProject">
+          <value>
+            <RecentProjectMetaInfo opened="true" projectWorkspaceId="28Qhlma8hr1Q5p3feqNDLyP9RSr">
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="build" value="IC-193.5233.102" />
+              <option name="buildTimestamp" value="1574898472681" />
+              <option name="productionCode" value="IC" />
+              <option name="projectOpenTimestamp" value="1653150475044" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
       </map>
     </option>
     <option name="lastProjectLocation" value="$USER_HOME$/Desktop" />
     <option name="recentPaths">
       <list>
+        <option value="D:/Universita/project/GradleProject" />
         <option value="$USER_HOME$/Desktop/CasperTest" />
         <option value="$USER_HOME$/Desktop/Book-a-Book-master" />
         <option value="$USER_HOME$/Desktop/Book-a-Book2" />

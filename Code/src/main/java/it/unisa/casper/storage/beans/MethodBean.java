@@ -23,7 +23,7 @@ public class MethodBean implements Comparable {
     private boolean staticMethod; // boolean che stabilisce se il metodo è statico
     private boolean isDefaultCostructor;// boolean che stabilisce se il costruttore utilizzato è quello di default
     private List<CodeSmell> affectedSmell; // lista di smell dai quali è affetto il metodo
-    private String visibility; //visibilità del metodo
+    private String visibility; //visibilita del metodo
 
     /**
      * costruttore
@@ -393,7 +393,7 @@ public class MethodBean implements Comparable {
         }
 
         /**
-         * setta la visibilità del metodo
+         * setta la visibilita del metodo
          *
          * @return builder
          */

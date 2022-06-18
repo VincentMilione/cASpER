@@ -58,7 +58,7 @@ public class MethodMover {
      * @param parameters parametri del metodo tra tonde
      * @param throwsList lista delle eccezioni che il metodo potrebbe lanciare
      * @param body       corpo del metodo compreso di parentesi {..}
-     * @return stringa singola con tutto già settato
+     * @return stringa singola con tutto gia settato
      */
     public static String buildMethod(String scope, String returnType, String nomeMetodo, String parameters, String throwsList, String body) {
         StringBuilder stringBuilder = new StringBuilder(scope);
@@ -139,7 +139,7 @@ public class MethodMover {
      * Questo metodo effettua un controllo per verificare se il metodo da spostare abbia un nome uguale
      * ad un altro metodo nella classe invidiata
      *
-     * @throws FeatureEnvyException lanciata per segnalare l'impossibilità al fix automatizzato
+     * @throws FeatureEnvyException lanciata per segnalare l'impossibilita al fix automatizzato
      */
     private void controlName() {
         int i = 0;
@@ -210,13 +210,13 @@ public class MethodMover {
     /**
      * Quando il FE è non fixabile automaticamente si lancia l'eccazzione
      *
-     * @throws FeatureEnvyException lanciata per segnalare l'impossibilità al fix automatizzato
+     * @throws FeatureEnvyException lanciata per segnalare l'impossibilita al fix automatizzato
      */
     private void otherFeatureEnvy() {
         String othervariables = "";
         StringBuilder newMethodBody = new StringBuilder();
         newMethodBody.append("{\n");
-        //Modifico il metodo già esistente
+        //Modifico il metodo gia esistente
         String newName = psiDestinationClass.getName().toLowerCase() + "Refactoring";
 
         //controllo se nel corpo del metodo affetto si sono chiamate a metodi nella stessa classe belonging

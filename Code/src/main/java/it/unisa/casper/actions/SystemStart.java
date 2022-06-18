@@ -116,6 +116,7 @@ public class SystemStart {
 
             ApplicationManager.getApplication().runReadAction(() -> {
                 try {
+                    //inizia il processo di parsing.... ma poi anche di analisi
                     packageList[0] = parser.parse();
                 } catch (ParsingException e) {
                     errorHappened = true;

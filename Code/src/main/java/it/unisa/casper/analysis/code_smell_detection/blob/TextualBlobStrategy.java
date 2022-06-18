@@ -14,7 +14,7 @@ import java.util.HashMap;
 
 Blob: Classe caratterizzata da una taglia molto grande, alto numero di attributi e metodi
 Il refactoring Extract Class prevede molte operazioni che possono essere applicate per rimuovere questo tipo di smell. 
-Esso permette di dividere la classe originale creando nuove classi e ridistribuendo le responsabilità.
+Esso permette di dividere la classe originale creando nuove classi e ridistribuendo le responsabilita.
 Le classi Blob sono caratterizzate da una dispersione semantica dei contenuti.
 
  */

@@ -3,7 +3,7 @@ package it.unisa.casper.gui;
 import it.unisa.casper.gui.radarMap.RadarMapUtils;
 import it.unisa.casper.gui.radarMap.RadarMapUtilsAdapter;
 import org.jetbrains.annotations.NotNull;
-import src.main.java.it.unisa.casper.gui.StyleText;
+
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import it.unisa.casper.storage.beans.ClassBean;

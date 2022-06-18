@@ -75,7 +75,7 @@ public class ParallelInheritancePage  extends DialogWrapper {
         pannelloClasse1.setLayout(new BorderLayout());
         JTextPane contenutoClasse1 = new JTextPane();
         contenutoClasse1.setLayout(new BorderLayout());
-        src.main.java.it.unisa.casper.gui.StyleText generator1 = new src.main.java.it.unisa.casper.gui.StyleText();
+        StyleText generator1 = new StyleText();
         contenutoClasse1.setStyledDocument(generator1.createDocument(superClass1.getTextContent()));
         sx.add(contenutoClasse1);
 
@@ -83,7 +83,7 @@ public class ParallelInheritancePage  extends DialogWrapper {
         pannelloClasse2.setLayout(new BorderLayout());
         JTextPane contenutoClasse2 = new JTextPane();
         contenutoClasse2.setLayout(new BorderLayout());
-        src.main.java.it.unisa.casper.gui.StyleText generator2 = new src.main.java.it.unisa.casper.gui.StyleText();
+        StyleText generator2 = new StyleText();
         contenutoClasse2.setStyledDocument(generator2.createDocument(superClass2.getTextContent()));
         dx.add(contenutoClasse2);
 

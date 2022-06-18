@@ -500,7 +500,7 @@ public class HistoryAnalysisStartup {
             "                                   single=commitHash).traverse_commits():\n" +
             "        for modifiedFile in commit.modifications:\n" +
             "            if '.java' in modifiedFile.filename:\n" +
-            "                # verifica se il file è già presente\n" +
+            "                # verifica se il file è gia presente\n" +
             "                if modifiedFile.filename in dizionario:\n" +
             "                    dizionario[modifiedFile.filename] = dizionario[modifiedFile.filename] + 1\n" +
             "                else:\n" +

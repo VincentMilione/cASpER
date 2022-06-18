@@ -7,7 +7,7 @@ import java.util.Objects;
  */
 public class InstanceVariableBean {
 
-    private String visibility; //visibilità della variabile di istanza
+    private String visibility; //visibilita della variabile di istanza
     private String fullQualifiedName; // fqn della variabile
     private String type;// tipo della variabile
     private String initialization; // inizializzazione della variabile
@@ -56,7 +56,7 @@ public class InstanceVariableBean {
     /**
      * getter
      *
-     * @return visibilità della variabile
+     * @return visibilita della variabile
      */
     public String getVisibility() {
         return visibility;
@@ -65,7 +65,7 @@ public class InstanceVariableBean {
     /**
      * setter
      *
-     * @return pVisibility visibilità della variabile
+     * @return pVisibility visibilita della variabile
      */
     public void setVisibility(String visibility) {
         this.visibility = visibility;

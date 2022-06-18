@@ -13,7 +13,7 @@ import it.unisa.casper.storage.beans.PackageBean;
 import it.unisa.casper.topic.TopicExtracter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import src.main.java.it.unisa.casper.gui.StyleText;
+import it.unisa.casper.gui.StyleText;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;

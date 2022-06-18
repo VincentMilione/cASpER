@@ -12,7 +12,7 @@ import java.util.HashMap;
 
 Promiscuous Package: Un pacchetto viene considerato promiscuo se contiene classi che implementano troppe funzioni,
 rendendo difficile la comprensione e il mantenimento.
-Per il refactoring si usa Extract Package, necessaria per dividere i pacchetti in sotto pacchetti e riorganizzando le responsabilità.
+Per il refactoring si usa Extract Package, necessaria per dividere i pacchetti in sotto pacchetti e riorganizzando le responsabilita.
 Questo smell è caratterizzato da insiemi di classi semanticamente diverse dalle altre classi del pacchetto.
 
  */

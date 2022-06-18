@@ -194,7 +194,7 @@ public class SplitClasses {
      *
      * @param startIndex:                l'indice da cui iniziare
      * @param tmpMarkovChain:            conserva la catena di markov tra le chiamate ricorsive
-     * @param tmpMarkovChainProbability: vettore riga conserva la probabilità
+     * @param tmpMarkovChainProbability: vettore riga conserva la probabilita
      * @param makeMethods:               memorizza tutti i metodi sinora inclusi in una qualunque catena di markov
      * @return true quando l'operazione e' terminata
      */
@@ -204,21 +204,21 @@ public class SplitClasses {
         int tmpSum = 0;
         double tmpRowSum = 0;
 
-        //Vettore utilizzato per contenere le probabilità presenti su una riga
+        //Vettore utilizzato per contenere le probabilita presenti su una riga
         Vector<Double> tmpRowProbability = new Vector<Double>();
-        //Vettore utilizzato per contenere gli indici delle probabilità presenti su una riga
+        //Vettore utilizzato per contenere gli indici delle probabilita presenti su una riga
         Vector<Integer> tmpRowIndexProbability = new Vector<Integer>();
 
-        makeMethods.add(startIndex);//Segno che ho già analizzato il metodo legato allo startIndex
+        makeMethods.add(startIndex);//Segno che ho gia analizzato il metodo legato allo startIndex
         tmpMarkovChain.add(startIndex);//Aggiungo l'indice passato alla catena di markov in produzione
 
-        //Azzero la colonna inerente il metodo già incluso nella catena di markov
-        //in questo modo nessun altro metodo potrà raggiungerlo
+        //Azzero la colonna inerente il metodo gia incluso nella catena di markov
+        //in questo modo nessun altro metodo potra raggiungerlo
         for (int i = 0; i < methodByMethodMatrix.length; i++) {
             methodByMethodMatrix[i][startIndex] = 0;
         }
 
-        //Sommo le probabilità nella catena di markov
+        //Sommo le probabilita nella catena di markov
         for (int j = 0; j < methodByMethodMatrix.length; j++) {
             if (j != startIndex) {
                 tmpMarkovChainProbability[j] = methodByMethodMatrix[startIndex][j] + tmpMarkovChainProbability[j];
@@ -228,7 +228,7 @@ public class SplitClasses {
             }
         }
 
-        //Calcolo le probabilità
+        //Calcolo le probabilita
         for (int j = 0; j < tmpMarkovChainProbability.length; j++) {
             if (startIndex != j) {
                 if (tmpMarkovChainProbability[j] > 0) {

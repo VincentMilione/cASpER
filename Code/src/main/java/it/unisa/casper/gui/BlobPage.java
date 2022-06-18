@@ -13,7 +13,8 @@ import it.unisa.casper.storage.beans.ClassBean;
 import it.unisa.casper.structuralMetrics.CKMetrics;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import src.main.java.it.unisa.casper.gui.StyleText;
+import it.unisa.casper.gui.StyleText;
+import org.jfree.chart.ChartPanel;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -33,7 +34,7 @@ public class BlobPage extends DialogWrapper {
     private JTextPane area;                     //area di testo dove viene mostrato in dettaglio il codice del CodeSmell selezionato
     private JPanel contentPanel;                //panel che raggruppa tutti gli elementi
     private JPanel panelRadarMapMaster;         //panel che ingloba la radar map
-    private JPanel panelRadarMap;
+    private ChartPanel panelRadarMap;
     private JPanel panelMetric;                 //panel per le metriche
     private JPanel panelButton;                 //panel che raggruppa i bottoni
     private JPanel panelWest;                   //panel che raggruppa gli elementi a sinistra

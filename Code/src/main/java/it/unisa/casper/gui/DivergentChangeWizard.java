@@ -62,7 +62,7 @@ public class DivergentChangeWizard extends DialogWrapper {
         dx.setLayout(new BoxLayout(dx, BoxLayout.Y_AXIS));
         dx.setBorder(new TitledBorder("NEW CLASSES"));
 
-        src.main.java.it.unisa.casper.gui.StyleText generator = new src.main.java.it.unisa.casper.gui.StyleText();
+        StyleText generator = new StyleText();
 
         JTextPane classeVecchia = new JTextPane();
         String textContentOld = classeAffetta.getTextContent();

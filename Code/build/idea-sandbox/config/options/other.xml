@@ -5,10 +5,11 @@
     <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="SettingsSearchHistory" value="Theme" />
+    <property name="build.toolwindow.Sync.selection.state" value="com.intellij.build.BuildTreeConsoleView" />
     <property name="create.project.preferred.importer" value="Existing Sources" />
     <property name="defaultJdkConfigured" value="true" />
-    <property name="file.chooser.recent.files" value="$USER_HOME$/Desktop/Book-a-Book-master&#10;C:/Users/faded/Desktop/Book-a-Book2&#10;C:/Users/Simone/Desktop/Book-a-Book-master/Book-a-Book2&#10;C:/Users/Simone/Desktop/TestAscetic/ProgettiTest" />
-    <property name="file.gist.reindex.count" value="421" />
+    <property name="file.chooser.recent.files" value="D:/Universita/project/GradleProject&#10;C:/Users/Admin/Desktop/Book-a-Book-master&#10;C:/Users/faded/Desktop/Book-a-Book2&#10;C:/Users/Simone/Desktop/Book-a-Book-master/Book-a-Book2&#10;C:/Users/Simone/Desktop/TestAscetic/ProgettiTest" />
+    <property name="file.gist.reindex.count" value="425" />
     <property name="ide.memory.adjusted" value="true" />
     <property name="installed.kotlin.plugin.version" value="1.3.60-release-IJ2019.3-1" />
     <property name="jdk.selected.JAVA_MODULE" value="11.0.4" />
@@ -17,7 +18,7 @@
     <property name="lastTip" value="55" />
     <property name="packagesearch.endpoint.url.fulltext" value="https://package-search.services.jetbrains.com/api/search/idea/fulltext" />
     <property name="packagesearch.endpoint.url.suggest" value="https://package-search.services.jetbrains.com/api/search/idea/suggest" />
-    <property name="packagesearch.status.updated.ts" value="1590593535017" />
+    <property name="packagesearch.status.updated.ts" value="1653150410865" />
     <property name="project.wizard.group" value="JAVA_MODULE" />
     <property name="project.wizard.template" value="Java" />
     <property name="tasks.pass.word.conversion.enforced" value="true" />

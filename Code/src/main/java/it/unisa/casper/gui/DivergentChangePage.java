@@ -8,7 +8,7 @@ import it.unisa.casper.gui.radarMap.RadarMapUtilsAdapter;
 import it.unisa.casper.refactor.exceptions.RefactorException;
 import it.unisa.casper.refactor.splitting_algorithm.SplitClasses;
 import org.jetbrains.annotations.NotNull;
-import src.main.java.it.unisa.casper.gui.StyleText;
+import it.unisa.casper.gui.StyleText;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import it.unisa.casper.storage.beans.ClassBean;
