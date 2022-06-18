@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="tasks">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/build/idea-sandbox/config/tasks/ProgettiTest.tasks.zip!/" />
+      <root url="jar://$PROJECT_DIR$/build/idea-sandbox/config/tasks/ProgettiTest.contexts.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

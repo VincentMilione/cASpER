@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="it.unisa.casper.analysis.code_smell_detection.blob.StructuralBlobStrategyTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2022-05-13T16:15:38" hostname="DESKTOP-PDP6NLS" time="0.467">
+  <properties/>
+  <testcase name="isSmellyTrueControl" classname="it.unisa.casper.analysis.code_smell_detection.blob.StructuralBlobStrategyTest" time="0.006"/>
+  <testcase name="isSmellyMinThreshold" classname="it.unisa.casper.analysis.code_smell_detection.blob.StructuralBlobStrategyTest" time="0.002"/>
+  <testcase name="isSmellyFalse" classname="it.unisa.casper.analysis.code_smell_detection.blob.StructuralBlobStrategyTest" time="0.001"/>
+  <testcase name="isSmellyNearThreshold" classname="it.unisa.casper.analysis.code_smell_detection.blob.StructuralBlobStrategyTest" time="0.003"/>
+  <testcase name="isSmellyTrue" classname="it.unisa.casper.analysis.code_smell_detection.blob.StructuralBlobStrategyTest" time="0.003"/>
+  <testcase name="isSmellyTrueControl" classname="it.unisa.casper.analysis.code_smell_detection.blob.StructuralBlobStrategyTest" time="0.001"/>
+  <testcase name="isSmellyMinThreshold" classname="it.unisa.casper.analysis.code_smell_detection.blob.StructuralBlobStrategyTest" time="0.001"/>
+  <testcase name="isSmellyFalse" classname="it.unisa.casper.analysis.code_smell_detection.blob.StructuralBlobStrategyTest" time="0.0"/>
+  <testcase name="isSmellyNearThreshold" classname="it.unisa.casper.analysis.code_smell_detection.blob.StructuralBlobStrategyTest" time="0.001"/>
+  <testcase name="isSmellyTrue" classname="it.unisa.casper.analysis.code_smell_detection.blob.StructuralBlobStrategyTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[mag 13, 2022 6:15:38 PM it.unisa.casper.analysis.code_smell_detection.blob.StructuralBlobStrategyTest isSmellyTrueControl
+INFORMAZIONI: 
+true
+mag 13, 2022 6:15:38 PM it.unisa.casper.analysis.code_smell_detection.blob.StructuralBlobStrategyTest isSmellyMinThreshold
+INFORMAZIONI: 
+false
+mag 13, 2022 6:15:38 PM it.unisa.casper.analysis.code_smell_detection.blob.StructuralBlobStrategyTest isSmellyFalse
+INFORMAZIONI: 
+false
+mag 13, 2022 6:15:38 PM it.unisa.casper.analysis.code_smell_detection.blob.StructuralBlobStrategyTest isSmellyNearThreshold
+INFORMAZIONI: 
+true
+mag 13, 2022 6:15:38 PM it.unisa.casper.analysis.code_smell_detection.blob.StructuralBlobStrategyTest isSmellyTrue
+INFORMAZIONI: 
+true
+mag 13, 2022 6:15:39 PM it.unisa.casper.analysis.code_smell_detection.blob.StructuralBlobStrategyTest isSmellyTrueControl
+INFORMAZIONI: 
+true
+mag 13, 2022 6:15:39 PM it.unisa.casper.analysis.code_smell_detection.blob.StructuralBlobStrategyTest isSmellyMinThreshold
+INFORMAZIONI: 
+false
+mag 13, 2022 6:15:39 PM it.unisa.casper.analysis.code_smell_detection.blob.StructuralBlobStrategyTest isSmellyFalse
+INFORMAZIONI: 
+false
+mag 13, 2022 6:15:39 PM it.unisa.casper.analysis.code_smell_detection.blob.StructuralBlobStrategyTest isSmellyNearThreshold
+INFORMAZIONI: 
+true
+mag 13, 2022 6:15:39 PM it.unisa.casper.analysis.code_smell_detection.blob.StructuralBlobStrategyTest isSmellyTrue
+INFORMAZIONI: 
+true
+]]></system-err>
+</testsuite>

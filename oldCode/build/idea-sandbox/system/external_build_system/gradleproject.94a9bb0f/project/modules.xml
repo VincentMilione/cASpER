@@ -1,0 +1,9 @@
+<project>
+  <component name="ExternalProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/GradleProject.iml" filepath="$PROJECT_DIR$/.idea/GradleProject.iml" group="GradleProject" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/GradleProject_main.iml" filepath="$PROJECT_DIR$/.idea/modules/GradleProject_main.iml" group="GradleProject" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/GradleProject_test.iml" filepath="$PROJECT_DIR$/.idea/modules/GradleProject_test.iml" group="GradleProject" />
+    </modules>
+  </component>
+</project>

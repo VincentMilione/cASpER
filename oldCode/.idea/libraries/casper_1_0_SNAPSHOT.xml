@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="casper-1.0-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/build/distributions/casper-1.0-SNAPSHOT.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="c5fd5044-bff2-432c-85ff-c34b4d39977b" name="Default Changelist" comment="&#10;inizializzazione progetto">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example-maven-plugin/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example-maven-plugin/.idea/compiler.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example-maven-plugin/.idea/jarRepositories.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example-maven-plugin/.idea/libraries/casper_1_1_2.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example-maven-plugin/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example-maven-plugin/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example-maven-plugin/example-maven-plugin.iml" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="casper" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="casper" type="f1a62948:ProjectNode" />
+                <item name="Source Sets" type="e897c970:GradleViewContributor$SourceSetsNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="casper" type="f1a62948:ProjectNode" />
+                <item name="Source Sets" type="e897c970:GradleViewContributor$SourceSetsNode" />
+                <item name="main" type="396b929e:GradleViewContributor$SourceSetNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="casper" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="casper" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="intellij" type="c8890929:TasksNode$1" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="d6750395-a160-417e-9fd6-c4420600ccd9" />
+        <option name="url" value="https://github.com/VincentMilione/cASpER.git" />
+      </UrlAndAccount>
+    </option>
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/src/main/java/it/unisa/casper/analysis/code_smell/BlobCodeSmell.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/it/unisa/casper/analysis/code_smell/ClassLevelCodeSmell.java" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="28sQBhXf9DIv0kfOezUeCpPBSNC" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/casper-maven-plugin" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Universita\project\cASpER\Code\src\main\resources" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Gradle.Code [runIde]">
+    <configuration name="Code [runIde]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="runIde" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="Code [test]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="test" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.Code [runIde]" />
+        <item itemvalue="Gradle.Code [test]" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c5fd5044-bff2-432c-85ff-c34b4d39977b" name="Default Changelist" comment="" />
+      <created>1652002679232</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1652002679232</updated>
+      <workItem from="1652002680407" duration="682000" />
+      <workItem from="1652458482416" duration="233000" />
+      <workItem from="1652516011945" duration="1204000" />
+      <workItem from="1652518703081" duration="7130000" />
+      <workItem from="1652540373598" duration="1911000" />
+      <workItem from="1652542314592" duration="1222000" />
+      <workItem from="1652543744745" duration="5557000" />
+      <workItem from="1652549599826" duration="127000" />
+      <workItem from="1652550155661" duration="205000" />
+      <workItem from="1652602730984" duration="1757000" />
+      <workItem from="1652605358332" duration="5051000" />
+      <workItem from="1652624587120" duration="614000" />
+      <workItem from="1652625835910" duration="1337000" />
+      <workItem from="1653077996066" duration="1176000" />
+      <workItem from="1653120236645" duration="7122000" />
+      <workItem from="1653130744953" duration="7000" />
+      <workItem from="1653132710318" duration="1018000" />
+      <workItem from="1653134122865" duration="2702000" />
+      <workItem from="1653149304970" duration="2499000" />
+      <workItem from="1653809827623" duration="12000" />
+      <workItem from="1653814858219" duration="74000" />
+      <workItem from="1653899154349" duration="466000" />
+      <workItem from="1653904538996" duration="3306000" />
+      <workItem from="1654009363439" duration="1387000" />
+      <workItem from="1654011443552" duration="203000" />
+      <workItem from="1654011665284" duration="1281000" />
+      <workItem from="1654013280614" duration="1282000" />
+      <workItem from="1654017448706" duration="389000" />
+      <workItem from="1654117642626" duration="1295000" />
+      <workItem from="1654158207124" duration="664000" />
+      <workItem from="1654159093120" duration="784000" />
+      <workItem from="1654162739367" duration="218000" />
+      <workItem from="1654338150484" duration="12304000" />
+      <workItem from="1654357300276" duration="1020000" />
+      <workItem from="1654359304887" duration="712000" />
+      <workItem from="1654360323355" duration="859000" />
+      <workItem from="1654499709134" duration="1842000" />
+      <workItem from="1654589380358" duration="738000" />
+      <workItem from="1654591608301" duration="244000" />
+      <workItem from="1655282207738" duration="10000" />
+      <workItem from="1655296299314" duration="2119000" />
+      <workItem from="1655304528653" duration="593000" />
+      <workItem from="1655546996824" duration="1057000" />
+      <workItem from="1655558869977" duration="2060000" />
+      <workItem from="1655560964743" duration="23000" />
+    </task>
+    <task id="LOCAL-00001" summary="&#10;inizializzazione progetto">
+      <created>1655559856426</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1655559856426</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="&#10;inizializzazione progetto" />
+    <option name="LAST_COMMIT_MESSAGE" value="&#10;inizializzazione progetto" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="460" y="119" key="FileChooserDialogImpl" timestamp="1655560986282">
+      <screen x="0" y="0" width="1360" height="728" />
+    </state>
+    <state x="460" y="119" key="FileChooserDialogImpl/0.0.1360.728@0.0.1360.728" timestamp="1655560986282" />
+    <state x="376" y="188" key="com.intellij.ide.util.TipDialog" timestamp="1655560964995">
+      <screen x="0" y="0" width="1360" height="728" />
+    </state>
+    <state x="376" y="188" key="com.intellij.ide.util.TipDialog/0.0.1360.728@0.0.1360.728" timestamp="1655560964995" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/Code$Code__test_.ic" NAME="Code [test] Coverage Results" MODIFIED="1652003359003" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+  </component>
+</project>

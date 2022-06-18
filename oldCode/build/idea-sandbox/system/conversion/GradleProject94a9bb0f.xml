@@ -1,0 +1,21 @@
+<conversion>
+  <applied-converters>
+    <converter id="kotlin-non-jvm-source-roots" />
+    <converter id="junit-to-android-junit-configurations" />
+    <converter id="android-sdk-library" />
+    <converter id="android-module-to-java-module" />
+    <converter id="android-proguard-options" />
+  </applied-converters>
+  <project-files>
+    <file path="D:\Universita\project\GradleProject\.idea\uiDesigner.xml" timestamp="1651244755768" />
+    <file path="D:\Universita\project\GradleProject\.idea\modules.xml" timestamp="1653150442876" />
+    <file path="D:\Universita\project\GradleProject\.idea\misc.xml" timestamp="1652542417915" />
+    <file path="D:\Universita\project\GradleProject\.idea\compiler.xml" timestamp="1653120861648" />
+    <file path="D:\Universita\project\GradleProject\.idea\jarRepositories.xml" timestamp="1651154954371" />
+    <file path="D:\Universita\project\GradleProject\.idea\vcs.xml" timestamp="1651155224501" />
+    <file path="D:\Universita\project\GradleProject\.idea\workspace.xml" timestamp="1653150442829" />
+    <file path="D:\Universita\project\GradleProject\.idea\runConfigurations.xml" timestamp="1651244587985" />
+    <file path="D:\Universita\project\GradleProject\.idea\GradleProject.iml" timestamp="1653150442814" />
+    <file path="D:\Universita\project\GradleProject\.idea\gradle.xml" timestamp="1651244587945" />
+  </project-files>
+</conversion>
