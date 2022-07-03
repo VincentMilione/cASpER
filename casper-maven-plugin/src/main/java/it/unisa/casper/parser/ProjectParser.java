@@ -7,18 +7,6 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
-import it.unisa.casper.analysis.code_smell.BlobCodeSmell;
-import it.unisa.casper.analysis.code_smell.FeatureEnvyCodeSmell;
-import it.unisa.casper.analysis.code_smell.MisplacedClassCodeSmell;
-import it.unisa.casper.analysis.code_smell.PromiscuousPackageCodeSmell;
-import it.unisa.casper.analysis.code_smell_detection.blob.StructuralBlobStrategy;
-import it.unisa.casper.analysis.code_smell_detection.blob.TextualBlobStrategy;
-import it.unisa.casper.analysis.code_smell_detection.feature_envy.StructuralFeatureEnvyStrategy;
-import it.unisa.casper.analysis.code_smell_detection.feature_envy.TextualFeatureEnvyStrategy;
-import it.unisa.casper.analysis.code_smell_detection.misplaced_class.StructuralMisplacedClassStrategy;
-import it.unisa.casper.analysis.code_smell_detection.misplaced_class.TextualMisplacedClassStrategy;
-import it.unisa.casper.analysis.code_smell_detection.promiscuous_package.StructuralPromiscuousPackageStrategy;
-import it.unisa.casper.analysis.code_smell_detection.promiscuous_package.TextualPromiscuousPackageStrategy;
 import it.unisa.casper.storage.beans.*;
 import org.apache.maven.project.MavenProject;
 import java.io.BufferedReader;
@@ -508,6 +496,211 @@ public class ProjectParser implements Parser{
         ((MethodList) methodCalls).setList(methodCallList);
         builder.setMethodsCalls(methodCalls);
         return builder.build();
+
+    }
+
+    private MethodBean parse(ConstructorDeclaration method, String textContent){
+
+        MethodBean.Builder builder = new MethodBean.Builder(getClassQualifiedName(getConstructorContainingClass(method))+"."+getConstructorName(method),getConstructorTextContent(method));
+
+        ArrayList<InstanceVariableBean> list = new ArrayList<>();
+        List<FieldDeclaration> fields =getClassFields(getConstructorContainingClass(method));
+        String methodBody=getConstructorBodyTextContent(method);
+
+        for(FieldDeclaration fd :fields){
+            List<InstanceVariableBean> temp = parse(fd);
+            for(InstanceVariableBean var : temp)
+                if(methodBody.contains(var.getFullQualifiedName()))
+                    list.add(var);
+        }
+
+        InstanceVariableList instanceVariableList = new InstanceVariableList();
+        instanceVariableList.setList(list);
+
+        builder.setInstanceVariableList(instanceVariableList);
+
+        ClassBean belongingClass = new ClassBean.Builder(getClassQualifiedName(getConstructorContainingClass(method)),textContent).build();
+        builder.setBelongingClass(belongingClass);
+
+        HashMap<String,ClassBean> map = new HashMap<>();
+        for(com.github.javaparser.ast.body.Parameter p : getConstructorParameters(method)){
+            map.put(p.getNameAsString(), new ClassBean.Builder(p.getTypeAsString(),"").build());
+        }
+
+        builder.setParameters(map);
+        builder.setVisibility(getConstructorVisibility(method));
+
+        MethodBeanList methodCalls = new MethodList();
+        List<MethodBean> methodCallList = new ArrayList<MethodBean>();
+
+        for(MethodBean m : findMethodInvocationsByConstructor(method))
+            methodCallList.add(m);
+
+
+        ((MethodList) methodCalls).setList(methodCallList);
+        builder.setMethodsCalls(methodCalls);
+        return builder.build();
+
+    }
+
+    private ClassBean parse(CompilationUnit projectClass, String contentForPackage){
+        File projectPackage = getClassPackage(projectClass);
+        String packageName = getPackageQualifiedName(projectPackage);
+
+        PackageBean packageBean = new PackageBean.Builder(packageName,contentForPackage).build();
+
+        String name = getClassQualifiedName(projectClass);
+        String text = getClassFileTextContent(projectClass);
+
+        ClassBean.Builder builder = new ClassBean.Builder(name, text);
+        builder.setBelongingPackage(packageBean);
+
+        String pathToFile = project.getCompileSourceRoots().get(0)+File.separator+(getClassQualifiedName(projectClass).replace('.',File.separatorChar))+".java";
+        System.out.println(pathToFile);
+        builder.setPathToFile(pathToFile);
+
+        if(getSuperClassName(projectClass)!=null)
+            builder.setSuperclass(getSuperClassName(projectClass));
+
+        Pattern newLine = Pattern.compile("\n");
+        String[] lines = newLine.split(getClassTextContent(projectClass));
+        builder.setLOC(lines.length);
+
+        ArrayList<InstanceVariableBean> listVariabili = new ArrayList<>();
+        List<FieldDeclaration> fields = getClassFields(projectClass);
+        for(FieldDeclaration field : fields){
+            for(InstanceVariableBean var : parse(field))
+                listVariabili.add(var);
+        }
+
+        InstanceVariableList instanceVariableList = new InstanceVariableList();
+        instanceVariableList.setList(listVariabili);
+        builder.setInstanceVariables(instanceVariableList);
+
+        ArrayList<MethodBean> listaMetodi = new ArrayList<>();
+        List<MethodDeclaration > methods = getClassMethods(projectClass);
+        for(MethodDeclaration m :methods)
+            listaMetodi.add(parse(m,text));
+
+        List<ConstructorDeclaration> constructors = getClassConstructors(projectClass);
+        for(ConstructorDeclaration cd : constructors)
+            listaMetodi.add(parse(cd,text));
+
+        MethodList methodList = new MethodList();
+        methodList.setList(listaMetodi);
+        builder.setMethods(methodList);
+
+        List<String> imports = new ArrayList<String>();
+        for(ImportDeclaration i : getClassImports(projectClass))
+            imports.add(i.toString());
+        builder.setImports(imports);
+        return builder.build();
+
+
+
+
+
+
+
+
+
+    }
+
+    private List<ImportDeclaration> getClassImports(CompilationUnit projectClass){
+        return projectClass.getImports();
+    }
+
+    private PackageBean parse(File projectPackage){
+
+        StringBuilder textContent = new StringBuilder();
+        String name;
+        ArrayList<ClassBean> list = new ArrayList<ClassBean>();
+
+        name = getPackageQualifiedName(projectPackage);
+        List<CompilationUnit> classes=null;
+
+        try {
+            classes = getPackageClasses(projectPackage);
+        }
+
+        catch(FileNotFoundException e){
+
+            e.printStackTrace();
+        }
+
+        for(CompilationUnit projectClass : classes)
+            textContent.append(getClassFileTextContent(projectClass));
+
+        PackageBean.Builder builder = new PackageBean.Builder(name,textContent.toString());
+
+        ClassList classBeanList = new ClassList();
+        for(CompilationUnit projectClass : classes)
+            list.add(parse(projectClass,textContent.toString()));
+
+        classBeanList.setList(list);
+        builder.setClassList(classBeanList);
+        return builder.build();
+
+
+    }
+
+    private void getAllPackages(File start, ArrayList<File> list) {
+
+        for(File child : start.listFiles())
+            if(child.isDirectory()){
+                list.add(child);
+                getAllPackages(child,list);
+            }
+
+
+
+    }
+
+    public List<PackageBean> parse() throws ParsingException {
+
+
+        PackageBean parsedPackageBean;
+        List<String> temp = project.getCompileSourceRoots();
+        String basePath = temp.get(0);
+        ArrayList<File> packages = new ArrayList<File>();
+        getAllPackages(new File(basePath),packages);
+        for(File projectPackage : packages){
+            parsedPackageBean = parse(projectPackage);
+            projectPackages.add(parsedPackageBean);
+        }
+
+        HashMap<String, Double> coseno = new HashMap<String, Double>();
+        HashMap<String, Integer> dipendence = new HashMap<String, Integer>();
+
+        ArrayList<String> smell = new ArrayList<String>();
+        smell.add("Feature");
+        smell.add("Misplaced");
+        smell.add("Blob");
+        smell.add("Promiscuous");
+
+        try{
+            FileReader f = new FileReader(System.getProperty("user.home") + File.separator + ".casper" + File.separator + "threshold.txt");
+            BufferedReader b = new BufferedReader(f);
+            String[] list = null;
+            for (String s : smell) {
+                list = b.readLine().split(",");
+                coseno.put("coseno" + s, Double.parseDouble(list[0]));
+                dipendence.put("dip" + s, Integer.parseInt(list[1]));
+                if (s.equalsIgnoreCase("promiscuous")) {
+                    dipendence.put("dip" + s + "2", Integer.parseInt(list[2]));
+                }
+                if (s.equalsIgnoreCase("blob")) {
+                    dipendence.put("dip" + s + "2", Integer.parseInt(list[2]));
+                    dipendence.put("dip" + s + "3", Integer.parseInt(list[3]));
+                }
+            }
+        }
+
+        catch(Exception e){
+
+        }
+
+        return projectPackages;
 
     }
 
