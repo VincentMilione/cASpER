@@ -469,8 +469,14 @@ public class ProjectParser implements Parser{
 
         InstanceVariableList instanceVariableList = new InstanceVariableList();
         instanceVariableList.setList(list);
+        String returnTypeName;
 
-        String returnTypeName = getMethodReturnType(method);
+
+             returnTypeName = getMethodReturnType(method);
+             if(returnTypeName==null)
+                 returnTypeName="void";
+
+
         ClassBean returnTypeBean = new ClassBean.Builder(returnTypeName,"").build();
         builder.setReturnType(returnTypeBean);
         builder.setInstanceVariableList(instanceVariableList);
