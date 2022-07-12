@@ -16,6 +16,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 public class ProjectParser implements Parser{
@@ -53,8 +54,11 @@ public class ProjectParser implements Parser{
 
         File[] files = projectPackage.listFiles();
         for (File f : files) {
-            if (!f.isDirectory())
-                classes.add(jp.parse(f).getResult().get());
+            if (!f.isDirectory()) {
+                Optional<CompilationUnit> compilationUnit = jp.parse(f).getResult();
+                compilationUnit.ifPresent(e -> classes.add(e));
+            }
+
         }
 
         return classes;
