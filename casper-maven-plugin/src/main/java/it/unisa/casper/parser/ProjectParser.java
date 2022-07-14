@@ -13,10 +13,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class ProjectParser implements Parser{
@@ -647,6 +644,9 @@ public class ProjectParser implements Parser{
             e.printStackTrace();
         }
 
+
+        sortClasses(classes);
+
         for(CompilationUnit projectClass : classes)
             textContent.append(getClassFileTextContent(projectClass));
 
@@ -726,6 +726,22 @@ public class ProjectParser implements Parser{
         return projectPackages;
 
     }
+
+    private void sortClasses(List<CompilationUnit> classes){
+        boolean scambio=true;
+        while(scambio){
+            scambio=false;
+            for(int i=0;i<=classes.size()-2;i++){
+                if(classes.get(i).getPrimaryTypeName().get().compareTo(classes.get(i+1).getPrimaryTypeName().get())>0){
+                    Collections.swap(classes,i,i+1);
+                    scambio=true;
+
+                }
+            }
+        }
+    }
+
+
 
 
 
