@@ -663,7 +663,11 @@ public class ProjectParser implements Parser{
 
         for(File child : start.listFiles())
             if(child.isDirectory()){
-                list.add(child);
+                for(int i =0; i<child.listFiles().length;i++)
+                    if(!child.listFiles()[i].isDirectory()) {
+                        list.add(child);
+                        break;
+                    }
                 getAllPackages(child,list);
             }
 
