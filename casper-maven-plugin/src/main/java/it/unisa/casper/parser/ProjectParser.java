@@ -197,11 +197,15 @@ public class ProjectParser implements Parser{
     }
 
     private String getMethodBodyTextContent(MethodDeclaration method) {
+        if(method.getBody().isPresent())
         return method.getBody().get().toString();
+        else
+            return "";
     }
 
     private String getConstructorBodyTextContent(ConstructorDeclaration method) {
         return method.getBody().toString();
+
     }
 
     private boolean isStaticMethod(MethodDeclaration method) {
