@@ -5,14 +5,16 @@ import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import it.unisa.casper.storage.beans.*;
 import org.apache.maven.project.MavenProject;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -26,15 +28,7 @@ public class ProjectParser implements Parser{
         this.project=project;
         projectPackages= new ArrayList<PackageBean>();
         threadList = new ArrayList<Thread>();
-
-
     }
-
-
-
-
-
-
 
     private String getPackageQualifiedName(File projectPackage) {
         String name = projectPackage.getAbsolutePath();
@@ -48,8 +42,10 @@ public class ProjectParser implements Parser{
         JavaParser jp = new JavaParser();
         ArrayList<CompilationUnit> classes = new ArrayList<CompilationUnit>();
 
+        List<File> files = new ArrayList<>();
+        files.addAll(Arrays.asList(projectPackage.listFiles()));
+        files.sort(Comparator.comparingInt(e -> e.getName().length()));
 
-        File[] files = projectPackage.listFiles();
         for (File f : files) {
             if (!f.isDirectory()) {
                 Optional<CompilationUnit> compilationUnit = jp.parse(f).getResult();
@@ -89,8 +85,11 @@ public class ProjectParser implements Parser{
     }
 
     private String getSuperClassName(CompilationUnit projectClass) {
+        Optional<String> type = projectClass.getPrimaryTypeName();
+        String declaration = type.isPresent() ? type.get() : "";
+        Optional<ClassOrInterfaceDeclaration> string = projectClass.getClassByName(declaration);
 
-        if (projectClass.getClassByName(projectClass.getPrimaryTypeName().get()).get().getExtendedTypes().isNonEmpty())
+        if (string.isPresent() ? string.get().getExtendedTypes().isNonEmpty() : false)
             return projectClass.getClassByName(projectClass.getPrimaryTypeName().get()).get().getExtendedTypes().get(0).getNameWithScope();
         else
             return null;
@@ -178,7 +177,12 @@ public class ProjectParser implements Parser{
     }
 
     private String getClassTextContent(CompilationUnit projectClass) {
-        return projectClass.getClassByName(projectClass.getPrimaryTypeName().get()).get().toString();
+        Optional<String> type = projectClass.getPrimaryTypeName();
+        String typeName = type.isPresent() ? type.get() : "";
+        Optional<ClassOrInterfaceDeclaration> classOption = projectClass.getClassByName(typeName);
+        String classContent = classOption.isPresent() ? classOption.get().toString() : "";
+
+        return classContent;
     }
 
     private String getMethodTextContent(MethodDeclaration method) {
@@ -218,11 +222,18 @@ public class ProjectParser implements Parser{
 
     }
 
+
     private String getMethodReturnType(MethodDeclaration method) {
+        try {
 
-        return method.getType().toString();
+            JavaParserTypeSolver solver = new JavaParserTypeSolver(project.getCompileSourceRoots().get(0));
 
+            ResolvedType type = JavaParserFacade.get(solver).convertToUsage(method.getType());
 
+            return type.describe();
+        } catch (Exception e) {
+            return method.getType().toString();
+        }
     }
 
     private NodeList<com.github.javaparser.ast.body.Parameter> getMethodParameters(MethodDeclaration method) {
@@ -491,7 +502,13 @@ public class ProjectParser implements Parser{
 
         HashMap<String,ClassBean> map = new HashMap<>();
         for(com.github.javaparser.ast.body.Parameter p : getMethodParameters(method)){
-            map.put(p.getNameAsString(), new ClassBean.Builder(p.getTypeAsString(),"").build());
+            try {
+                JavaParserTypeSolver solver = new JavaParserTypeSolver(project.getCompileSourceRoots().get(0));
+                ResolvedType type = JavaParserFacade.get(solver).convertToUsage(p.getType());
+                map.put(p.getNameAsString(), new ClassBean.Builder(type.describe(), "").build());
+            }catch (Exception e) {
+                map.put(p.getNameAsString(), new ClassBean.Builder(p.getTypeAsString(), "").build());
+            }
         }
 
         builder.setParameters(map);
@@ -572,7 +589,6 @@ public class ProjectParser implements Parser{
         builder.setBelongingPackage(packageBean);
 
         String pathToFile = project.getCompileSourceRoots().get(0)+File.separator+(getClassQualifiedName(projectClass).replace('.',File.separatorChar))+".java";
-        System.out.println(pathToFile);
         builder.setPathToFile(pathToFile);
 
         if(getSuperClassName(projectClass)!=null)
@@ -611,15 +627,6 @@ public class ProjectParser implements Parser{
             imports.add(i.toString());
         builder.setImports(imports);
         return builder.build();
-
-
-
-
-
-
-
-
-
     }
 
     private List<ImportDeclaration> getClassImports(CompilationUnit projectClass){
@@ -644,8 +651,6 @@ public class ProjectParser implements Parser{
             e.printStackTrace();
         }
 
-
-        sortClasses(classes);
 
         for(CompilationUnit projectClass : classes)
             textContent.append(getClassFileTextContent(projectClass));
@@ -680,7 +685,6 @@ public class ProjectParser implements Parser{
     }
 
     public List<PackageBean> parse() throws ParsingException {
-
 
         PackageBean parsedPackageBean;
         List<String> temp = project.getCompileSourceRoots();
@@ -740,14 +744,5 @@ public class ProjectParser implements Parser{
             }
         }
     }
-
-
-
-
-
-
-
-
-
 }
 
