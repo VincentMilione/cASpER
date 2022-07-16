@@ -5,6 +5,8 @@ import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.expr.SuperExpr;
+import com.github.javaparser.ast.stmt.UnparsableStmt;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
@@ -50,6 +52,7 @@ public class ProjectParser implements Parser{
             if (!f.isDirectory()) {
                 Optional<CompilationUnit> compilationUnit = jp.parse(f).getResult();
                 compilationUnit.ifPresent(e -> classes.add(e));
+
             }
 
         }
@@ -61,8 +64,9 @@ public class ProjectParser implements Parser{
 
         String textContent = "";
 
-        for (Node n : projectClass.getChildNodes())
+        for (Node n : projectClass.getChildNodes()) {
             textContent = textContent + n.toString();
+        }
 
         return textContent;
 
@@ -98,6 +102,8 @@ public class ProjectParser implements Parser{
     }
 
     private List<FieldDeclaration> getClassFields(CompilationUnit projectClass) {
+
+
 
         return projectClass.getClassByName(projectClass.getPrimaryTypeName().get()).get().getFields();
     }
@@ -356,6 +362,8 @@ public class ProjectParser implements Parser{
             result.add(call);
 
 
+
+
         return result;
 
     }
@@ -459,6 +467,16 @@ public class ProjectParser implements Parser{
 
             }
         }
+
+
+
+        if(method.findAll(SuperExpr.class).size()>=1){
+            String superClassName = getSuperClassName(getConstructorContainingClass(method));
+            bean = new MethodBean.Builder(superClassName+"."+superClassName.substring(superClassName.lastIndexOf(".")+1),"").build();
+            invocations.add(bean);
+            System.out.println("bibbi");
+        }
+
 
         return invocations;
 
@@ -580,6 +598,9 @@ public class ProjectParser implements Parser{
         File projectPackage = getClassPackage(projectClass);
         String packageName = getPackageQualifiedName(projectPackage);
 
+        if(!projectClass.getClassByName(projectClass.getPrimaryTypeName().get()).isPresent())
+            return null;
+
         PackageBean packageBean = new PackageBean.Builder(packageName,contentForPackage).build();
 
         String name = getClassQualifiedName(projectClass);
@@ -658,8 +679,13 @@ public class ProjectParser implements Parser{
         PackageBean.Builder builder = new PackageBean.Builder(name,textContent.toString());
 
         ClassList classBeanList = new ClassList();
-        for(CompilationUnit projectClass : classes)
-            list.add(parse(projectClass,textContent.toString()));
+        ClassBean temp;
+
+        for(CompilationUnit projectClass : classes) {
+            temp=parse(projectClass, textContent.toString());
+            if(temp!=null)
+            list.add(temp);
+        }
 
         classBeanList.setList(list);
         builder.setClassList(classBeanList);
