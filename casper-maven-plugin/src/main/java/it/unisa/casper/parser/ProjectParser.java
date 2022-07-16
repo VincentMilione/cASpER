@@ -8,6 +8,7 @@ import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.SuperExpr;
 import com.github.javaparser.ast.stmt.UnparsableStmt;
 import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
@@ -93,8 +94,13 @@ public class ProjectParser implements Parser{
         String declaration = type.isPresent() ? type.get() : "";
         Optional<ClassOrInterfaceDeclaration> string = projectClass.getClassByName(declaration);
 
-        if (string.isPresent() ? string.get().getExtendedTypes().isNonEmpty() : false)
-            return projectClass.getClassByName(projectClass.getPrimaryTypeName().get()).get().getExtendedTypes().get(0).getNameWithScope();
+        if (string.isPresent() ? string.get().getExtendedTypes().isNonEmpty() : false) {
+            JavaParserTypeSolver solver = new JavaParserTypeSolver(project.getCompileSourceRoots().get(0));
+
+            ResolvedType rt = JavaParserFacade.get(solver).convertToUsage(projectClass.getClassByName(projectClass.getPrimaryTypeName().get()).get().getExtendedTypes().get(0));
+            return rt.describe();
+            //return projectClass.getClassByName(projectClass.getPrimaryTypeName().get()).get().getExtendedTypes().get(0).getNameWithScope();
+        }
         else
             return null;
 
@@ -139,11 +145,25 @@ public class ProjectParser implements Parser{
 
         List<InstanceVariableBean> result = new ArrayList<InstanceVariableBean>();
 
+        JavaParserTypeSolver solver = new JavaParserTypeSolver(project.getCompileSourceRoots().get(0));
+        String temp;
 
         for (VariableDeclarator v : instanceVariables) {
 
+
+            try {
+                ResolvedType rt = JavaParserFacade.get(solver).convertToUsage(v.getType());
+                temp=rt.describe();
+            }
+
+            catch(UnsolvedSymbolException | NullPointerException e){
+
+                temp=v.getTypeAsString();
+            }
+
+
             String name = v.getNameAsString();
-            String type = v.getTypeAsString();
+            String type = temp;
             String init = "";
             if (v.getInitializer().isPresent()) {
                 init = v.getInitializer().get().toString();
@@ -474,7 +494,6 @@ public class ProjectParser implements Parser{
             String superClassName = getSuperClassName(getConstructorContainingClass(method));
             bean = new MethodBean.Builder(superClassName+"."+superClassName.substring(superClassName.lastIndexOf(".")+1),"").build();
             invocations.add(bean);
-            System.out.println("bibbi");
         }
 
 
@@ -575,7 +594,15 @@ public class ProjectParser implements Parser{
 
         HashMap<String,ClassBean> map = new HashMap<>();
         for(com.github.javaparser.ast.body.Parameter p : getConstructorParameters(method)){
-            map.put(p.getNameAsString(), new ClassBean.Builder(p.getTypeAsString(),"").build());
+            try {
+                JavaParserTypeSolver solver = new JavaParserTypeSolver(project.getCompileSourceRoots().get(0));
+                ResolvedType type = JavaParserFacade.get(solver).convertToUsage(p.getType());
+                map.put(p.getNameAsString(), new ClassBean.Builder(type.describe(), "").build());
+            }
+            catch(NullPointerException | UnsolvedSymbolException e){
+                map.put(p.getNameAsString(), new ClassBean.Builder(p.getTypeAsString(), "").build());
+
+            }
         }
 
         builder.setParameters(map);
