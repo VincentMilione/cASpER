@@ -6,6 +6,7 @@ import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.SuperExpr;
+import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
 import com.github.javaparser.ast.stmt.UnparsableStmt;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
@@ -490,10 +491,11 @@ public class ProjectParser implements Parser{
 
 
 
-        if(method.findAll(SuperExpr.class).size()>=1){
+        if(method.findAll(ExplicitConstructorInvocationStmt.class).size()>=1){
             String superClassName = getSuperClassName(getConstructorContainingClass(method));
             bean = new MethodBean.Builder(superClassName+"."+superClassName.substring(superClassName.lastIndexOf(".")+1),"").build();
             invocations.add(bean);
+            System.out.println("prova");
         }
 
 
