@@ -12,6 +12,7 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserMethodDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import it.unisa.casper.storage.beans.*;
 import org.apache.maven.project.MavenProject;
@@ -331,8 +332,10 @@ public class ProjectParser implements Parser{
         List<MethodCallExpr> result = new ArrayList<MethodCallExpr>();
 
 
-        for(MethodCallExpr call : method.findAll(MethodCallExpr.class))
-            result.add(call);
+        for(MethodCallExpr call : method.findAll(MethodCallExpr.class)) {
+
+                result.add(call);
+        }
 
 
 
@@ -347,8 +350,13 @@ public class ProjectParser implements Parser{
         List<MethodCallExpr> result = new ArrayList<MethodCallExpr>();
 
 
-        for(MethodCallExpr call : method.findAll(MethodCallExpr.class))
-            result.add(call);
+
+
+
+        for(MethodCallExpr call : method.findAll(MethodCallExpr.class)) {
+
+                result.add(call);
+        }
 
 
 
@@ -360,6 +368,8 @@ public class ProjectParser implements Parser{
     private List<ObjectCreationExpr> getInvokedConstructors(MethodDeclaration method){
 
         List<ObjectCreationExpr> result = new ArrayList<ObjectCreationExpr>();
+
+
 
 
 
@@ -751,53 +761,12 @@ public class ProjectParser implements Parser{
             projectPackages.add(parsedPackageBean);
         }
 
-        HashMap<String, Double> coseno = new HashMap<String, Double>();
-        HashMap<String, Integer> dipendence = new HashMap<String, Integer>();
 
-        ArrayList<String> smell = new ArrayList<String>();
-        smell.add("Feature");
-        smell.add("Misplaced");
-        smell.add("Blob");
-        smell.add("Promiscuous");
-
-        try{
-            FileReader f = new FileReader(System.getProperty("user.home") + File.separator + ".casper" + File.separator + "threshold.txt");
-            BufferedReader b = new BufferedReader(f);
-            String[] list = null;
-            for (String s : smell) {
-                list = b.readLine().split(",");
-                coseno.put("coseno" + s, Double.parseDouble(list[0]));
-                dipendence.put("dip" + s, Integer.parseInt(list[1]));
-                if (s.equalsIgnoreCase("promiscuous")) {
-                    dipendence.put("dip" + s + "2", Integer.parseInt(list[2]));
-                }
-                if (s.equalsIgnoreCase("blob")) {
-                    dipendence.put("dip" + s + "2", Integer.parseInt(list[2]));
-                    dipendence.put("dip" + s + "3", Integer.parseInt(list[3]));
-                }
-            }
-        }
-
-        catch(Exception e){
-
-        }
 
         return projectPackages;
 
     }
 
-    private void sortClasses(List<CompilationUnit> classes){
-        boolean scambio=true;
-        while(scambio){
-            scambio=false;
-            for(int i=0;i<=classes.size()-2;i++){
-                if(classes.get(i).getPrimaryTypeName().get().compareTo(classes.get(i+1).getPrimaryTypeName().get())>0){
-                    Collections.swap(classes,i,i+1);
-                    scambio=true;
 
-                }
-            }
-        }
-    }
 }
 
