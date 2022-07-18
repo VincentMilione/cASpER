@@ -14,8 +14,8 @@ public class Board {
 
     public static Board organizeDefaultBoard () {
         ArrayList<Piece> lst = new ArrayList<>();
-        Piece king1 = new Piece("kingWhite", (s1,s2,e1,e2)-> {return true;});
-        Piece king2 = new Piece("kingBlack", (s1,s2,e1,e2)-> {return true;});
+        Piece king1 = new Piece("kingWhite", new TrueMove());
+        Piece king2 = new Piece("kingBlack", new TrueMove());
 
         lst.add(king1);
         lst.add(king2);

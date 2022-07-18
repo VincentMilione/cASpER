@@ -1,8 +1,10 @@
-package it.prova;
+package it.prova2;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import it.prova.Cliente;
+import it.prova.Prodotto;
 
 public class Mercatino {
 
