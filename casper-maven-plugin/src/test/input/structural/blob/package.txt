@@ -1,0 +1,111 @@
+public class BankAccount {
+
+    private double balance;
+
+    public BankAccount(double balance, int accountNumber) {
+        this.balance = balance;
+        this.accountNumber = accountNumber;
+    }
+
+    public double withdraw(String b) {
+            BankAccount new= BankAccount(b);
+            b.getBalance() - 1000;
+            return new;
+        }
+}public class Cliente {
+
+	private String name;
+	private int età;
+	
+	public Cliente(String name, int età) {
+		this.name = name;
+		this.età = età;
+	}
+	public String getName() {
+		return name;
+	}
+	public int getEtà() {
+		return età;
+	}
+	
+}
+public class Phone {
+   private final String unformattedNumber;
+   public Phone(String unformattedNumber) {
+      this.unformattedNumber = unformattedNumber;
+   }
+   public String getAreaCode() {
+      return unformattedNumber.substring(0,3);
+   }
+   public String getPrefix() {
+      return unformattedNumber.substring(3,6);
+   }
+   public String getNumber() {
+      return unformattedNumber.substring(6,10);
+   }
+}public class Ristorante {
+
+	public String nome_Ristorante;
+
+	public Ristorante(String nome_Ristorante) {
+		this.nome_Ristorante = nome_Ristorante;
+	}
+
+	public String getNome_Ristorante() {
+		return nome_Ristorante;
+	}
+
+	public void setNome_Ristorante(String nome_Ristorante) {
+		this.nome_Ristorante = nome_Ristorante;
+	}
+
+}import java.util.ArrayList;
+import java.util.Scanner;
+
+public class Prodotto {
+
+	public String uno;
+	public String due;
+	public double tre;
+
+    public double withdraw(String b) {
+            BankAccount new= BankAccount(b);
+            b.getBalance() - 1000;
+            return new;
+        }
+    public String getMobilePhoneNumber(Phone mobilePhone) {
+          return "(" +
+             mobilePhone.getAreaCode() + ") " +
+             mobilePhone.getPrefix() + "-" +
+             mobilePhone.getNumber();
+       }
+
+	public String nuovoNomeRistorante() {
+		Scanner in= new Scanner(System.in);
+		String ristorante=in.nextLine();
+		Ristorante r= new Ristorante(ristorante);
+		return ristorante=r.getNome_Ristorante();
+	}
+
+
+
+	public Cliente scorriListaClienti() {
+		
+		ArrayList<Cliente> clienti= new ArrayList<Cliente>();
+		Cliente c= new Cliente("Lucia",30);
+		clienti.add(c);
+		c= new Cliente("Ugo",51);
+		clienti.add(c);
+		c= new Cliente("Maria",16);
+		clienti.add(c);
+		c= new Cliente("Lucia",20);
+		clienti.add(c);
+
+		int contatore=0;
+
+		for(int i=0;i<4;i++) {
+			if(clienti.get(contatore)<clienti.get(i).getEtà()){contatore=i;}
+		}	
+		return clienti.get(contatore);
+	}
+}

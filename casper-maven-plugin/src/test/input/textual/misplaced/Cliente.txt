@@ -1,0 +1,25 @@
+private String name;
+	private int età;	private String luogoDiNascita;
+	
+	public Cliente(String name, int età) {
+		this.name = name;
+		this.età = età;
+	}
+	public String getName() {
+		return name;
+	}
+	public int getEtà() {
+		return età;
+	}
+	public String setName(String name) {
+		this.name = name;
+	}
+	public int setEtà(int newEta) {
+		this.età = età;
+	}
+	public String getLuogo() {
+		return luogoDiNascita;
+	}
+	public String setLuogo(String luogoDiNascita) {
+		this.luogoDiNascita = luogoDiNascita;
+	}
