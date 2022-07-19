@@ -1,7 +1,9 @@
 package it.unisa.casper.parser;
 
+import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.expr.MethodCallExpr;
@@ -9,12 +11,16 @@ import com.github.javaparser.ast.expr.SuperExpr;
 import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
 import com.github.javaparser.ast.stmt.UnparsableStmt;
 import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserMethodDeclaration;
+import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import it.unisa.casper.storage.beans.*;
+import javassist.compiler.ast.MethodDecl;
 import org.apache.maven.project.MavenProject;
 
 import java.io.*;
@@ -43,8 +49,10 @@ public class ProjectParser implements Parser{
     }
 
     private List<CompilationUnit> getPackageClasses(File projectPackage) throws FileNotFoundException {
-
-        JavaParser jp = new JavaParser();
+        ParserConfiguration parserConfiguration = new ParserConfiguration();
+        TypeSolver typeSolver = new JavaParserTypeSolver(project.getCompileSourceRoots().get(0));
+        parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        JavaParser jp = new JavaParser(parserConfiguration);
         ArrayList<CompilationUnit> classes = new ArrayList<CompilationUnit>();
 
         List<File> files = new ArrayList<>();
@@ -413,11 +421,15 @@ public class ProjectParser implements Parser{
 
         for(MethodCallExpr call : methodCallExpressions){
             try{
-                String className=JavaParserFacade.get(solver).getType(call.getScope().get()).toString();
-                className = className.substring(className.indexOf("{")+1,className.indexOf(","));
-                bean = new MethodBean.Builder(className+"."+call.getNameAsString(),"").build();
-                if(!invocations.contains(bean))
-                    invocations.add(bean);
+                Optional<Expression> optional = call.getScope();
+                if (optional.isPresent()) {
+                    ResolvedType resolvedType = JavaParserFacade.get(solver).getType(optional.get());
+                    String className = resolvedType.describe();
+
+                    bean = new MethodBean.Builder(className + "." + call.getNameAsString(), "").build();
+                    if (!invocations.contains(bean))
+                        invocations.add(bean);
+                }
             }
 
             catch(Exception e){
@@ -505,7 +517,6 @@ public class ProjectParser implements Parser{
             String superClassName = getSuperClassName(getConstructorContainingClass(method));
             bean = new MethodBean.Builder(superClassName+"."+superClassName.substring(superClassName.lastIndexOf(".")+1),"").build();
             invocations.add(bean);
-            System.out.println("prova");
         }
 
 
