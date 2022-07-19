@@ -1,5 +1,8 @@
 package it.unisa.casper.cli;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import dnl.utils.text.table.TextTable;
 import it.unisa.casper.analysis.code_smell.*;
 import static it.unisa.casper.cli.AnalysisStartup.*;
 import it.unisa.casper.parser.Parser;
@@ -18,135 +21,124 @@ import javax.inject.Inject;
 import java.io.File;
 import java.io.PrintStream;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
-@Mojo(name = "hellogoal", defaultPhase = LifecyclePhase.COMPILE)
+@Mojo(name = "goaldetection", defaultPhase = LifecyclePhase.COMPILE)
 public class ExampleMojo extends AbstractMojo {
 
     @Parameter
     private HashMap<String, Double> cosine;
     @Parameter
     private HashMap<String, Integer> dependency;
-    @Parameter
-    private Properties textual;
-    @Parameter
-    private Properties structural;
     @Parameter(defaultValue = "false")
     private boolean textContent;
-    @Parameter(defaultValue = "mfpb")
-    private String display;
     @Inject
     private MavenProject project;
     @Parameter(property = "dump")
     private String dump;
 
-
-    private List<PackageBean> projectPackages;
-
     public void execute() throws MojoExecutionException, MojoFailureException {
         //check inputs
+        Boolean isDump = Objects.isNull(dump) ? false : dump.length() > 0;
 
-        try {
+        try (PrintStream stream = isDump ? new PrintStream(new File(dump)) : System.out) {
+
             parser = new ProjectParser(project);
-            projectPackages = parser.parse();
-            HashMap<String, HashMap> mapSmells = analysis();
-            Output out = dump == null ? new Output(mapSmells) : new Output(mapSmells, new PrintStream(new File(dump)));
-            out.write();
+            List<PackageBean> projectPackages = parser.parse();
+            List<HashMap<String, String>> mapSmells = analysis(projectPackages);
+            String [] columnames = {"Component Name","Smell Name","Algorithm", "Priority", "soglia"};
 
+            TextTable table = new TextTable(columnames, prepareData(mapSmells));
+            table.printTable(stream, 2);
+            //print results of analysis
+            if (textContent) {
+                stream.println();
+                stream.println("----------------------------------------------------");
+                for (HashMap<String, String> object : mapSmells) {
+                    stream.printf("%s\t\t\t%s\t\t%s\n%s", object.get("componentName"), object.get("smellName"), object.get("algorithm"), object.get("textContent"));
+                    stream.println();
+                    stream.println("----------------------------------------------------");
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private HashMap<String, HashMap> analysis() {
-        HashMap<PackageBean, List<CodeSmell>> packageSmells = new HashMap<>();
-        HashMap<ClassBean, List<CodeSmell>> classSmells = new HashMap<>();
-        HashMap<MethodBean, List<CodeSmell>> methodSmells = new HashMap<>();
-        HashMap<String, HashMap> projectSmells = new HashMap<>();
-        List <CodeSmell> tmp;
+    private Object[][] prepareData (List<HashMap<String, String>> mapSmells) {
+        Object[][] objects = new Object[mapSmells.size()][];
+        int i = 0;
+        for (HashMap<String, String> el : mapSmells) {
+            String componentName = el.get("componentName");
+            String smellName = el.get("smellName");
+            String algorithm = el.get("algorithm");
+            String soglia = el.get("soglie");
+            String priority = el.get("priority");
+
+            objects[i] = new Object[5];
+            objects[i][0] = componentName;
+            objects[i][1] = smellName;
+            objects[i][2] = algorithm;
+            objects[i][3] = priority;
+            objects[i][4] = soglia;
+            i++;
+        }
+        return objects;
+    }
+
+    private List <HashMap<String, String>> extractInfo (String fullQualifiedName, List<CodeSmell> smells, String text) {
+        List<HashMap<String, String>> lst = new ArrayList<>();
+
+        for (CodeSmell smell : smells) {
+                HashMap<String, String> map = new HashMap<>();
+
+
+                map.put("componentName", fullQualifiedName);
+                map.put("textContent", text);
+                map.put("smellName", smell.getSmellName());
+                map.put("algorithm", smell.getAlgoritmsUsed());
+                map.put("soglie", AnalysisStartup.soglie(smell));
+                map.put("priority", AnalysisStartup.prioritySmell(smell, dependency, cosine));
+                lst.add(map);
+        }
+
+        return lst;
+    }
+
+
+    private List<HashMap<String, String>> analysis(List<PackageBean> projectPackages) {
+        if (Objects.isNull(projectPackages)) return new ArrayList<>();
+
+        List<HashMap<String, String>> projectSmells = new ArrayList<>();
 
         for (PackageBean packageBean : projectPackages) {
             AnalysisStartup.packageAnalysis(projectPackages, cosine, dependency, packageBean);
-            tmp = packageBean.getAffectedSmell();
+            String fullqualifiedPackage = packageBean.getFullQualifiedName(), packageText = packageBean.getTextContent();
+            List<CodeSmell> packageSmells = packageBean.getAffectedSmell(); //smell name, algorithm e soglie;
+            List<ClassBean> classes = !Objects.isNull(packageBean.getClassList()) ? packageBean.getClassList() : new ArrayList<>();
 
-            if (!tmp.isEmpty())
-                packageSmells.put(packageBean, tmp);
-
-            for (ClassBean classBean : packageBean.getClassList()) {
+            for (ClassBean classBean : classes) {
                 classAnalysis(projectPackages, cosine, dependency, classBean);
-                tmp = classBean.getAffectedSmell();
+                String fullqualifiedClass = classBean.getFullQualifiedName(), classText = classBean.getTextContent();
+                List<CodeSmell> classSmells = classBean.getAffectedSmell(); //smell name, algorithm e soglie;
+                List<MethodBean> methods = !Objects.isNull(classBean.getMethodList()) ? classBean.getMethodList() : new ArrayList<>();
 
-                if (!tmp.isEmpty())
-                    classSmells.put(classBean, classBean.getAffectedSmell());
-
-                for (MethodBean methodBean : classBean.getMethodList()) {
+                for (MethodBean methodBean : methods) {
                     methodAnalysis(projectPackages, cosine, dependency, methodBean);
-                    tmp = methodBean.getAffectedSmell();
-                    if (!tmp.isEmpty())
-                        methodSmells.put(methodBean, methodBean.getAffectedSmell());
-                }
-            }
-        }
+                    String fullqualifiedMethod = methodBean.getFullQualifiedName(), methodText = classBean.getTextContent();
+                    List<CodeSmell> methodSmells = methodBean.getAffectedSmell(); //smell name, algorithm e soglie;
 
-        projectSmells.put("package", packageSmells);
-        projectSmells.put("class", classSmells);
-        projectSmells.put("method", methodSmells);
+                    projectSmells.addAll(extractInfo(fullqualifiedMethod, methodSmells, methodText));
+                }
+                projectSmells.addAll(extractInfo(fullqualifiedClass, classSmells, classText));
+            }
+            projectSmells.addAll(extractInfo(fullqualifiedPackage, packageSmells, packageText));
+        }
 
         return projectSmells;
     }
 
     private Parser parser;
-
-    private class Output {
-
-        private HashMap<String, HashMap> maps;
-        private PrintStream stream;
-
-        public Output(HashMap<String, HashMap> map, PrintStream stream) { maps = map; this.stream = stream; }
-
-        public Output(HashMap<String, HashMap> map) { maps = map; stream = System.out;}
-
-        public void write() {
-            writeClassesAffected();
-            writePackagesAffected();
-            writeMethodsAffected();
-        }
-
-        private void writePackagesAffected () {
-            HashMap<PackageBean, List<CodeSmell>> map = maps.get("package");
-
-            for (Map.Entry<PackageBean, List<CodeSmell>> entry : map.entrySet()) {
-                PackageBean bean = entry.getKey();
-                List<CodeSmell> smells = entry.getValue();
-
-                for (CodeSmell smell : smells)
-                    stream.println(bean.getFullQualifiedName() +" " +smell.getSmellName()+" " +smell.getAlgoritmsUsed() +" " +smell.getIndex());
-            }
-        }
-
-        private void writeClassesAffected () {
-            HashMap<ClassBean, List<CodeSmell>> map = maps.get("class");
-
-            for (Map.Entry<ClassBean, List<CodeSmell>> entry : map.entrySet()) {
-                ClassBean bean = entry.getKey();
-                List<CodeSmell> smells = entry.getValue();
-
-                for (CodeSmell smell : smells)
-                    stream.println(bean.getFullQualifiedName() +" " +smell.getSmellName()+" " +smell.getAlgoritmsUsed() +" " +smell.getIndex());
-            }
-        }
-
-        private void writeMethodsAffected () {
-            HashMap<MethodBean, List<CodeSmell>> map = maps.get("method");
-
-            for (Map.Entry<MethodBean, List<CodeSmell>> entry : map.entrySet()) {
-                MethodBean bean = entry.getKey();
-                List<CodeSmell> smells = entry.getValue();
-
-                for (CodeSmell smell : smells)
-                    stream.println(bean.getFullQualifiedName() +" " +smell.getSmellName()+" " +smell.getAlgoritmsUsed() +" " +smell.getIndex());
-            }
-        }
-    }
 }
 
