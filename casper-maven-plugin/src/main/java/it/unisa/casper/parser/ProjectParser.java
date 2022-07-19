@@ -7,25 +7,16 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.ast.expr.SuperExpr;
 import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
-import com.github.javaparser.ast.stmt.UnparsableStmt;
-import com.github.javaparser.ast.type.Type;
-import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserMethodDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import it.unisa.casper.storage.beans.*;
-import javassist.compiler.ast.MethodDecl;
 import org.apache.maven.project.MavenProject;
-
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -690,7 +681,9 @@ public class ProjectParser implements Parser{
 
             Pattern newLine = Pattern.compile("\n");
             String[] lines = newLine.split(getClassTextContent(projectClass));
-            builder.setLOC(lines.length);
+            int LOC = 0;
+            for (String line : lines) if (!line.equals("\r")) LOC++;
+            builder.setLOC(LOC);
 
             ArrayList<InstanceVariableBean> listVariabili = new ArrayList<>();
             List<FieldDeclaration> fields = getClassFields(projectClass);
@@ -743,7 +736,9 @@ public class ProjectParser implements Parser{
 
             Pattern newLine = Pattern.compile("\n");
             String[] lines = newLine.split(getClassTextContent(projectClass));
-            builder.setLOC(lines.length);
+            int LOC = 0;
+            for (String line : lines) if (!line.equals("\r")) LOC++;
+            builder.setLOC(LOC);
 
             ArrayList<MethodBean> listaMetodi = new ArrayList<>();
             List<MethodDeclaration> methods = getClassMethods(projectClass);
