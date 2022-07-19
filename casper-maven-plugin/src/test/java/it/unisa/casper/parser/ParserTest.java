@@ -111,12 +111,12 @@ public class ParserTest {
      */
     @Test
     public void TCP_01 () throws ParsingException, IOException {
-        Parser parser = new ProjectParser(project);
         String oraclePath = oracles.get(0);
         String oracleContent = new String(Files.readAllBytes(Paths.get(oraclePath))).replaceAll("\\s+","");
         boolean flag = false;
 
         when(project.getCompileSourceRoots()).thenReturn(Collections.singletonList(roots.get(0)));
+        Parser parser = new ProjectParser(project);
         List<PackageBean> lst = parser.parse();
         flag = oracleContent.equalsIgnoreCase(new GsonBuilder().create().toJson(lst).replaceAll("\\s+",""));
 
@@ -132,11 +132,11 @@ public class ParserTest {
      */
     @Test
     public void TCP_02 () throws ParsingException, IOException, JSONException {
-        Parser parser = new ProjectParser(project);
         String oraclePath = oracles.get(1);
         String oracleContent = purify(new String(Files.readAllBytes(Paths.get(oraclePath))));
 
         when(project.getCompileSourceRoots()).thenReturn(Collections.singletonList(roots.get(1)));
+        Parser parser = new ProjectParser(project);
         List<PackageBean> lst = parser.parse();
         String computedJSON = purify(new GsonBuilder().create().toJson(lst));
 
@@ -152,11 +152,11 @@ public class ParserTest {
      */
     @Test
     public void TCP_03 () throws ParsingException, IOException, JSONException {
-        Parser parser = new ProjectParser(project);
         String oraclePath = oracles.get(2);
         String oracleContent = purify(new String(Files.readAllBytes(Paths.get(oraclePath))));
 
         when(project.getCompileSourceRoots()).thenReturn(Collections.singletonList(roots.get(2)));
+        Parser parser = new ProjectParser(project);
         List<PackageBean> lst = parser.parse();
         String computedJSON = purify(new GsonBuilder().create().toJson(lst));
 
@@ -172,11 +172,11 @@ public class ParserTest {
      */
     @Test
     public void TCP_04 () throws ParsingException, IOException, JSONException {
-        Parser parser = new ProjectParser(project);
         String oraclePath = oracles.get(3);
         String oracleContent = purify(new String(Files.readAllBytes(Paths.get(oraclePath))));
 
         when(project.getCompileSourceRoots()).thenReturn(Collections.singletonList(roots.get(3)));
+        Parser parser = new ProjectParser(project);
         List<PackageBean> lst = parser.parse();
         String computedJSON = purify(new GsonBuilder().create().toJson(lst));
 
@@ -192,11 +192,11 @@ public class ParserTest {
      */
     @Test
     public void TCP_05 () throws ParsingException, IOException, JSONException {
-        Parser parser = new ProjectParser(project);
         String oraclePath = oracles.get(4);
         String oracleContent = purify(new String(Files.readAllBytes(Paths.get(oraclePath))));
 
         when(project.getCompileSourceRoots()).thenReturn(Collections.singletonList(roots.get(4)));
+        Parser parser = new ProjectParser(project);
         List<PackageBean> lst = parser.parse();
         String computedJSON = purify(new GsonBuilder().create().toJson(lst));
 
@@ -212,11 +212,11 @@ public class ParserTest {
      */
     @Test
     public void TCP_06 () throws ParsingException, IOException, JSONException {
-        Parser parser = new ProjectParser(project);
         String oraclePath = oracles.get(5);
         String oracleContent = purify(new String(Files.readAllBytes(Paths.get(oraclePath))));
 
         when(project.getCompileSourceRoots()).thenReturn(Collections.singletonList(roots.get(5)));
+        Parser parser = new ProjectParser(project);
         List<PackageBean> lst = parser.parse();
         String computedJSON = purify(new GsonBuilder().create().toJson(lst));
 
@@ -232,11 +232,11 @@ public class ParserTest {
      */
     @Test
     public void TCP_07 () throws ParsingException, IOException, JSONException {
-        Parser parser = new ProjectParser(project);
         String oraclePath = oracles.get(6);
         String oracleContent = purify(new String(Files.readAllBytes(Paths.get(oraclePath))));
 
         when(project.getCompileSourceRoots()).thenReturn(Collections.singletonList(roots.get(6)));
+        Parser parser = new ProjectParser(project);
         List<PackageBean> lst = parser.parse();
         String computedJSON = purify(new GsonBuilder().create().toJson(lst));
 
@@ -252,11 +252,11 @@ public class ParserTest {
      */
     @Test
     public void TCP_08 () throws ParsingException, IOException, JSONException {
-        Parser parser = new ProjectParser(project);
         String oraclePath = oracles.get(7);
         String oracleContent = purify(new String(Files.readAllBytes(Paths.get(oraclePath))));
 
         when(project.getCompileSourceRoots()).thenReturn(Collections.singletonList(roots.get(7)));
+        Parser parser = new ProjectParser(project);
         List<PackageBean> lst = parser.parse();
         String computedJSON = purify(new GsonBuilder().create().toJson(lst));
 
@@ -272,11 +272,11 @@ public class ParserTest {
      */
     @Test
     public void TCP_09 () throws ParsingException, IOException, JSONException {
-        Parser parser = new ProjectParser(project);
         String oraclePath = oracles.get(8);
         String oracleContent = purify(new String(Files.readAllBytes(Paths.get(oraclePath))));
 
         when(project.getCompileSourceRoots()).thenReturn(Collections.singletonList(roots.get(8)));
+        Parser parser = new ProjectParser(project);
         List<PackageBean> lst = parser.parse();
         String computedJSON = purify(new GsonBuilder().create().toJson(lst));
 
@@ -292,11 +292,11 @@ public class ParserTest {
      */
     @Test
     public void TCP_10 () throws ParsingException, IOException, JSONException {
-        Parser parser = new ProjectParser(project);
         String oraclePath = oracles.get(9);
         String oracleContent = purify(new String(Files.readAllBytes(Paths.get(oraclePath))));
 
         when(project.getCompileSourceRoots()).thenReturn(Collections.singletonList(roots.get(9)));
+        Parser parser = new ProjectParser(project);
         List<PackageBean> lst = parser.parse();
         String computedJSON = purify(new GsonBuilder().create().toJson(lst));
 
@@ -312,11 +312,11 @@ public class ParserTest {
      */
     @Test
     public void TCP_11 () throws ParsingException, IOException, JSONException {
-        Parser parser = new ProjectParser(project);
         String oraclePath = oracles.get(10);
         String oracleContent = purify(new String(Files.readAllBytes(Paths.get(oraclePath))));
 
         when(project.getCompileSourceRoots()).thenReturn(Collections.singletonList(roots.get(10)));
+        Parser parser = new ProjectParser(project);
         List<PackageBean> lst = parser.parse();
         String computedJSON = purify(new GsonBuilder().create().toJson(lst));
 

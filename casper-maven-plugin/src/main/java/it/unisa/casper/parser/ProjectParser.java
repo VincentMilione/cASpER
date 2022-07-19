@@ -120,9 +120,10 @@ public class ProjectParser implements Parser{
 
     private List<FieldDeclaration> getClassFields(CompilationUnit projectClass) {
 
-
-
-        return projectClass.getClassByName(projectClass.getPrimaryTypeName().get()).get().getFields();
+        String name = projectClass.getPrimaryTypeName().get();
+        if (projectClass.getClassByName(name).isPresent())
+            return projectClass.getClassByName(name).get().getFields();
+        else return projectClass.getInterfaceByName(name).get().getFields();
     }
 
     private List<InstanceVariableBean> parse(FieldDeclaration field) {
@@ -186,9 +187,10 @@ public class ProjectParser implements Parser{
     }
 
     private List<MethodDeclaration> getClassMethods(CompilationUnit projectClass) {
-
-        return projectClass.getClassByName(projectClass.getPrimaryTypeName().get()).get().getMethods();
-
+        String name = projectClass.getPrimaryTypeName().get();
+        if (projectClass.getClassByName(name).isPresent())
+            return projectClass.getClassByName(name).get().getMethods();
+        else return projectClass.getInterfaceByName(name).get().getMethods();
     }
 
     private List<ConstructorDeclaration> getClassConstructors(CompilationUnit projectClass) {
@@ -668,57 +670,100 @@ public class ProjectParser implements Parser{
     private ClassBean parse(CompilationUnit projectClass, String contentForPackage){
         File projectPackage = getClassPackage(projectClass);
         String packageName = getPackageQualifiedName(projectPackage);
+        Optional<String> nameOptional = projectClass.getPrimaryTypeName();
 
-        if(!projectClass.getClassByName(projectClass.getPrimaryTypeName().get()).isPresent())
-            return null;
+        if (!nameOptional.isPresent()) return null;
+        if(projectClass.getClassByName(nameOptional.get()).isPresent()) {
+            PackageBean packageBean = new PackageBean.Builder(packageName, contentForPackage).build();
 
-        PackageBean packageBean = new PackageBean.Builder(packageName,contentForPackage).build();
+            String name = getClassQualifiedName(projectClass);
+            String text = getClassFileTextContent(projectClass);
 
-        String name = getClassQualifiedName(projectClass);
-        String text = getClassFileTextContent(projectClass);
+            ClassBean.Builder builder = new ClassBean.Builder(name, text);
+            builder.setBelongingPackage(packageBean);
 
-        ClassBean.Builder builder = new ClassBean.Builder(name, text);
-        builder.setBelongingPackage(packageBean);
+            String pathToFile = project.getCompileSourceRoots().get(0) + File.separator + (getClassQualifiedName(projectClass).replace('.', File.separatorChar)) + ".java";
+            builder.setPathToFile(pathToFile);
 
-        String pathToFile = project.getCompileSourceRoots().get(0)+File.separator+(getClassQualifiedName(projectClass).replace('.',File.separatorChar))+".java";
-        builder.setPathToFile(pathToFile);
+            if (getSuperClassName(projectClass) != null)
+                builder.setSuperclass(getSuperClassName(projectClass));
 
-        if(getSuperClassName(projectClass)!=null)
-            builder.setSuperclass(getSuperClassName(projectClass));
+            Pattern newLine = Pattern.compile("\n");
+            String[] lines = newLine.split(getClassTextContent(projectClass));
+            builder.setLOC(lines.length);
 
-        Pattern newLine = Pattern.compile("\n");
-        String[] lines = newLine.split(getClassTextContent(projectClass));
-        builder.setLOC(lines.length);
+            ArrayList<InstanceVariableBean> listVariabili = new ArrayList<>();
+            List<FieldDeclaration> fields = getClassFields(projectClass);
+            for (FieldDeclaration field : fields) {
+                for (InstanceVariableBean var : parse(field))
+                    listVariabili.add(var);
+            }
 
-        ArrayList<InstanceVariableBean> listVariabili = new ArrayList<>();
-        List<FieldDeclaration> fields = getClassFields(projectClass);
-        for(FieldDeclaration field : fields){
-            for(InstanceVariableBean var : parse(field))
-                listVariabili.add(var);
+            InstanceVariableList instanceVariableList = new InstanceVariableList();
+            instanceVariableList.setList(listVariabili);
+            builder.setInstanceVariables(instanceVariableList);
+
+            ArrayList<MethodBean> listaMetodi = new ArrayList<>();
+            List<MethodDeclaration> methods = getClassMethods(projectClass);
+            for (MethodDeclaration m : methods) {
+                MethodBean bean = parse(m, text);
+                if(Objects.isNull(bean.getVisibility())) bean.setVisibility("private");
+                listaMetodi.add(bean);
+            }
+
+            List<ConstructorDeclaration> constructors = getClassConstructors(projectClass);
+            for (ConstructorDeclaration cd : constructors) {
+                MethodBean bean = parse(cd, text);
+                if(Objects.isNull(bean.getVisibility())) bean.setVisibility("public");
+                listaMetodi.add(bean);
+            }
+            MethodList methodList = new MethodList();
+            methodList.setList(listaMetodi);
+            builder.setMethods(methodList);
+
+            List<String> imports = new ArrayList<String>();
+            for (ImportDeclaration i : getClassImports(projectClass))
+                imports.add(i.toString());
+            builder.setImports(imports);
+            return builder.build();
+        } else if (projectClass.getInterfaceByName(nameOptional.get()).isPresent()) {
+            PackageBean packageBean = new PackageBean.Builder(packageName, contentForPackage).build();
+
+            String name = getClassQualifiedName(projectClass);
+            String text = getClassFileTextContent(projectClass);
+
+            ClassBean.Builder builder = new ClassBean.Builder(name, text);
+            builder.setBelongingPackage(packageBean);
+
+            String pathToFile = project.getCompileSourceRoots().get(0) + File.separator + (getClassQualifiedName(projectClass).replace('.', File.separatorChar)) + ".java";
+            builder.setPathToFile(pathToFile);
+
+            if (getSuperClassName(projectClass) != null)
+                builder.setSuperclass(getSuperClassName(projectClass));
+
+            Pattern newLine = Pattern.compile("\n");
+            String[] lines = newLine.split(getClassTextContent(projectClass));
+            builder.setLOC(lines.length);
+
+            ArrayList<MethodBean> listaMetodi = new ArrayList<>();
+            List<MethodDeclaration> methods = getClassMethods(projectClass);
+            for (MethodDeclaration m : methods) {
+                MethodBean bean = parse(m, text);
+                if(Objects.isNull(bean.getVisibility())) bean.setVisibility("public");
+                listaMetodi.add(bean);
+            }
+
+            MethodList methodList = new MethodList();
+            methodList.setList(listaMetodi);
+            builder.setMethods(methodList);
+
+            List<String> imports = new ArrayList<String>();
+            for (ImportDeclaration i : getClassImports(projectClass))
+                imports.add(i.toString());
+            builder.setImports(imports);
+            return builder.build();
         }
-
-        InstanceVariableList instanceVariableList = new InstanceVariableList();
-        instanceVariableList.setList(listVariabili);
-        builder.setInstanceVariables(instanceVariableList);
-
-        ArrayList<MethodBean> listaMetodi = new ArrayList<>();
-        List<MethodDeclaration > methods = getClassMethods(projectClass);
-        for(MethodDeclaration m :methods)
-            listaMetodi.add(parse(m,text));
-
-        List<ConstructorDeclaration> constructors = getClassConstructors(projectClass);
-        for(ConstructorDeclaration cd : constructors)
-            listaMetodi.add(parse(cd,text));
-
-        MethodList methodList = new MethodList();
-        methodList.setList(listaMetodi);
-        builder.setMethods(methodList);
-
-        List<String> imports = new ArrayList<String>();
-        for(ImportDeclaration i : getClassImports(projectClass))
-            imports.add(i.toString());
-        builder.setImports(imports);
-        return builder.build();
+        return null;
     }
 
     private List<ImportDeclaration> getClassImports(CompilationUnit projectClass){

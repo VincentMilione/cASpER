@@ -86,6 +86,13 @@ public class MethodBean implements Comparable {
         return returnType;
     }
 
+
+    /**
+     * setter
+     *
+     */
+    public void setVisibility (String visibility) { this.visibility = visibility; }
+
     /**
      * getter
      *
