@@ -15,8 +15,10 @@ import it.unisa.casper.storage.beans.PackageBean;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class AnalysisStartup {
+    private static int maxS = 0;
 
     public static void methodAnalysis(List<PackageBean> projectPackages, HashMap<String, Double> coseno, HashMap<String, Integer> dipendence, MethodBean methodBean) {
         TextualFeatureEnvyStrategy textualFeatureEnvyStrategy = new TextualFeatureEnvyStrategy(projectPackages, coseno.get("cosenoFeature"));
@@ -59,98 +61,146 @@ public class AnalysisStartup {
         packageBean.setSimilarity(0);
     }
 
-    private static String getFeatureEnvyPriority(CodeSmell codeSmell){
-        HashMap<String, Double> threshold = codeSmell.getIndex();
-        Double value = threshold.get("threshold");
+    public static String prioritySmell(CodeSmell smell, HashMap<String, Integer> dependency, HashMap<String, Double> cosine) {
+        if (Objects.isNull(smell) || Objects.isNull(cosine) || Objects.isNull(dependency)) return null; //null check
 
-        if(value > 0 && value <= 5){
+        String algoritmsUsed = smell.getAlgoritmsUsed();
+        String smellName = smell.getSmellName();
+
+        if(Objects.isNull(algoritmsUsed) || Objects.isNull(smellName)) return null;
+        if (algoritmsUsed.startsWith("Textual")) {
+            int index = smellName.indexOf(" ");
+            String coseno = "coseno"+smellName.substring(0, index >= 0 ? index : smellName.length());
+            double cosSoglia = cosine.get(coseno);
+            HashMap<String, Double> cosEff = smell.getIndex();
+
+            return priorityTextual(smellName, cosSoglia, cosEff.get("coseno"));
+        } else
+            return priorityStructural(smell, dependency);
+    }
+
+    private static String priorityTextual(String smellName, double soglia, double cosEff) {
+        int complessita = 1, alto = 0;
+        boolean basso = false;
+
+        if (cosEff >= 0.75) alto++;
+        if (cosEff >= soglia + (0.1 * soglia))
+            complessita += 2;
+        else basso = true;
+
+        return prioritySmell(complessita, basso, alto);
+    }
+
+    private static String priorityStructural (CodeSmell smell, HashMap<String, Integer> soglie) {
+        String smellName = smell.getSmellName();
+        HashMap<String, Double> map = smell.getIndex();
+        if (Objects.isNull(smellName) || Objects.isNull(map)) return null;
+
+        int index = smellName.indexOf(" ");
+        String dip = "dip"+smellName.substring(0, index >= 0 ? index : smellName.length());
+        String priority = null;
+
+        switch (smellName) {
+            case "Blob":
+                String dip2 = dip+"2";
+                String dip3 = dip+"3";
+
+                priority = blobPriority(soglie.get(dip), soglie.get(dip2), soglie.get(dip3),
+                        map.get("LCOM"), map.get("featureSum"), map.get("ELOC"));
+                break;
+            case "Feature Envy":
+            case "Misplaced Class":
+                priority = generalPriority(soglie.get(dip), map.get("dipendenza"));
+                break;
+            case "Promiscuous Package":
+                dip2 = dip +"2";
+
+                priority = promiscuosPriority(soglie.get(dip), soglie.get(dip2),
+                        map.get("InverseMIntraC"), map.get("MInterC"));
+                break;
+        }
+        return priority;
+    }
+
+    private static String promiscuosPriority(int sogliaIntraC, int sogliaInter, double intraC, double inter) {
+        int complessita = 0, alto = 0;
+        boolean basso = false;
+        double sogliaIntraCreale = sogliaIntraC / 100.0, sogliaInterreale = sogliaInter / 100.0;
+
+        if (inter >= 0.75 || intraC >= 0.75) alto++;
+        if (sogliaInterreale <= inter || sogliaIntraCreale <= intraC) {
+            complessita += 2;
+            alto++;
+        }
+        if (sogliaInterreale == inter || sogliaIntraCreale == intraC) basso = true;
+
+        return prioritySmell(complessita, basso, alto);
+    }
+
+    public static String blobPriority(int sogliaLCOM, int sogliaFSUM, int sogliaELOC, double lcom, double fsum, double eloc) {
+        int complessita = 0, alto = 0;
+        boolean basso = false;
+
+        if (sogliaLCOM <= lcom || sogliaFSUM <= fsum || sogliaELOC <= eloc) {
+            complessita += 2;
+            alto++;
+            if (sogliaLCOM == lcom || sogliaFSUM == fsum || sogliaELOC == eloc) {
+                basso = true;
+            }
+        }
+        return prioritySmell(complessita, basso, alto);
+    }
+
+    public static String generalPriority(int sogliaDip, double dip) {
+        int complessita = 2, alto = 0;
+        boolean basso = false;
+
+        if (dip <= sogliaDip)  basso = true;
+        if (dip >= (maxS - (maxS * 0.25))) alto++;
+        if (dip >= maxS) maxS = new Double(dip).intValue();
+
+        return prioritySmell(complessita, basso, alto);
+    }
+
+    private static String prioritySmell(int complessita, boolean basso, int alto) {
+
+        if (complessita <= 2 && alto < 1) {
             return "low";
-        }else{
-            if(value > 5 && value <= 10 ){
-                return "medium";
-            }else{
-                if(value > 15 && value <= 20){
-                    return "high";
-                }else{
-                    return "urgent";
+        } else {
+            if (!basso) {
+                switch (alto) {
+                    case 1:
+                        return "high";
+                    case 2:
+                        return "urgent";
+                    default:
+                        return "medium";
                 }
             }
+            return "medium";
         }
     }
 
-    private static String getParallelInheritancePriority(CodeSmell codeSmell){
-        HashMap<String, Double> threshold = codeSmell.getIndex();
-        Double value = threshold.get("threshold");
+    public static String soglie(CodeSmell smell) {
+        if (Objects.isNull(smell)) return null;
+        HashMap<String, Double> map = smell.getIndex();
+        String smellName = smell.getSmellName();
+        String algorithm = smell.getAlgoritmsUsed();
+        String soglia = null;
 
-        if(value > 0 && value <= 20){
-            return "low";
-        }else{
-            if(value > 20 && value <= 30 ){
-                return "medium";
-            }else{
-                if(value > 30 && value <= 40){
-                    return "high";
-                }else{
-                    return "urgent";
-                }
-            }
+        if (algorithm.equals("Textual")) return map.get("coseno") + "";
+        switch (smellName) {
+            case "Blob":
+                soglia = map.get("LCOM") +"-" +map.get("featureSum") +"-"+ map.get("ELOC");
+                break;
+            case "Feature Envy":
+            case "Misplaced Class":
+                soglia = map.get("dipendenza") +"";
+                break;
+            case "Promiscuous Package":
+                soglia = map.get("InverseMIntraC")+"-" +map.get("MInterC");
+                break;
         }
-    }
-
-    private static String shotgunSurgeryPriority(CodeSmell codeSmell){
-        HashMap<String, Double> threshold = codeSmell.getIndex();
-        Double value = threshold.get("threshold");
-
-        if(value > 0 && value <= 2){
-            return "low";
-        }else{
-            if(value > 2 && value <= 4 ){
-                return "medium";
-            }else{
-                if(value > 4 && value <= 6){
-                    return "high";
-                }else{
-                    return "urgent";
-                }
-            }
-        }
-    }
-
-    private static String divergentChangePriority(CodeSmell codeSmell){
-        HashMap<String, Double> threshold = codeSmell.getIndex();
-        Double value = threshold.get("threshold");
-
-        if(value > 0 && value <= 2){
-            return "low";
-        }else{
-            if(value > 2 && value <= 4 ){
-                return "medium";
-            }else{
-                if(value > 4 && value <= 6){
-                    return "high";
-                }else{
-                    return "urgent";
-                }
-            }
-        }
-    }
-
-    private static String blobPriority(CodeSmell codeSmell){
-        HashMap<String, Double> threshold = codeSmell.getIndex();
-        Double value = threshold.get("threshold") - 8;
-
-        if(value >= 0 && value <= 2){
-            return "low";
-        }else{
-            if(value > 2 && value <= 10 ){
-                return "medium";
-            }else{
-                if(value > 10 && value <= 15){
-                    return "high";
-                }else{
-                    return "urgent";
-                }
-            }
-        }
+        return soglia;
     }
 }
