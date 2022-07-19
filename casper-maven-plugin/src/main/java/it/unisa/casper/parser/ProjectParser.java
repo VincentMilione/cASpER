@@ -34,6 +34,7 @@ public class ProjectParser implements Parser{
     private MavenProject project;
     private final List<PackageBean> projectPackages;
     private List<Thread> threadList;
+    private List<CompilationUnit> allClasses=new ArrayList<CompilationUnit>();
 
     public ProjectParser(MavenProject project){
         this.project=project;
@@ -416,7 +417,7 @@ public class ProjectParser implements Parser{
         List<MethodCallExpr> methodCallExpressions = getInvokedMethods(method);
         List<ObjectCreationExpr> constructorExpressions = getInvokedConstructors(method);
 
-        MethodBean bean;
+        MethodBean bean=null;
         JavaParserTypeSolver solver = new JavaParserTypeSolver(project.getCompileSourceRoots().get(0));
 
         for(MethodCallExpr call : methodCallExpressions){
@@ -425,10 +426,30 @@ public class ProjectParser implements Parser{
                 if (optional.isPresent()) {
                     ResolvedType resolvedType = JavaParserFacade.get(solver).getType(optional.get());
                     String className = resolvedType.describe();
+                    boolean found=false;
+                    boolean foundClass=false;
+                    if(call.getName().asString().equals("toString")||call.getName().asString().equals("equals")||call.getName().asString().equals("clone")){
+                        for(CompilationUnit cu : allClasses) {
+                            if(foundClass)
+                                break;
 
-                    bean = new MethodBean.Builder(className + "." + call.getNameAsString(), "").build();
-                    if (!invocations.contains(bean))
-                        invocations.add(bean);
+                            if (getClassQualifiedName(cu).equals(className)) {
+                                foundClass=true;
+                                for (MethodDeclaration m : getClassMethods(cu))
+                                    if (m.getNameAsString().equals(call.getNameAsString())) {
+                                        found = true;
+                                        break;
+                                    }
+                            }
+                        }
+
+                    }
+
+                    if((!call.getName().toString().equals("toString") && !call.getName().toString().equals("equals") && !call.getName().toString().equals("clone") )|| found==true ) {
+                        bean = new MethodBean.Builder(className + "." + call.getNameAsString(), "").build();
+                        if (!invocations.contains(bean))
+                            invocations.add(bean);
+                    }
                 }
             }
 
@@ -751,6 +772,15 @@ public class ProjectParser implements Parser{
                 for(int i =0; i<child.listFiles().length;i++)
                     if(!child.listFiles()[i].isDirectory()) {
                         list.add(child);
+                        try {
+                            for (CompilationUnit cu : getPackageClasses(child))
+                                allClasses.add(cu);
+                        }
+
+                        catch(FileNotFoundException e){
+                            e.printStackTrace();
+                        }
+
                         break;
                     }
                 getAllPackages(child,list);
