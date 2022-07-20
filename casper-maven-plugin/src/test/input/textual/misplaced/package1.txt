@@ -1,0 +1,50 @@
+public class Cliente {
+
+	private String name;
+	private int età;	private String luogoDiNascita;
+	
+	public Cliente(String name, int età) {
+		this.name = name;
+		this.età = età;
+	}
+	public String getName() {
+		return name;
+	}
+	public int getEtà() {
+		return età;
+	}
+	public String setName(String name) {
+		this.name = name;
+	}
+	public int setEtà(int newEta) {
+		this.età = età;
+	}
+	public String getLuogo() {
+		return luogoDiNascita;
+	}
+	public String setLuogo(String luogoDiNascita) {
+		this.luogoDiNascita = luogoDiNascita;
+	}
+	}
+public class Gestione{	public Cliente scorriListaClienti() {
+		
+		ArrayList<Cliente> clienti= new ArrayList<Cliente>();
+		Cliente c= new Cliente("Lucia",30);
+		clienti.add(c);
+		c= new Cliente("Ugo",51,"SA");
+		clienti.add(c);
+		c= new Cliente("Maria",16,"MI");
+		clienti.add(c);
+		c= new Cliente("Lucia",20,"MI");
+		clienti.add(c);
+
+		int contatore=0;
+
+String concatenationLuohi="";		for(int i=0;i<clienti.length;i++) {
+			if(clienti.get(contatore).getEtà()<clienti.get(i).getEtà()){clienti.get(contatore).setEtà(0);contatore=i;}
+		}	
+		for(int i=0;i<clienti.length;i++) {
+			if(clienti.get(contatore).getLuogo.equals(clienti.get(i).getLuogo())){concatenationLuohi+ =" "+ clienti.get(contatore).getLuogo();contatore=i;}
+		}	
+		return clienti.get(contatore).setLuogo("NA");
+	}}

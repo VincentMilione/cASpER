@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="2a2c9d02-b4f0-4d88-b042-1f9a348faa5d" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+        <option value="Interface" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../../../../../.." />
+  </component>
+  <component name="ProjectId" id="2BtifI8nbq27DzSt6JYvbN5BaA3" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\test_projects\test09\src\main\java\it\prova" />
+      <recent name="D:\test_projects\test09\src\main\java" />
+    </key>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="2a2c9d02-b4f0-4d88-b042-1f9a348faa5d" name="Default Changelist" comment="" />
+      <created>1657731883036</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1657731883036</updated>
+      <workItem from="1657731885346" duration="208000" />
+      <workItem from="1657732635264" duration="1262000" />
+      <workItem from="1657781891417" duration="618000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="277" y="22" key="#Project_Structure" timestamp="1657733511972">
+      <screen x="0" y="0" width="1360" height="728" />
+    </state>
+    <state x="277" y="22" key="#Project_Structure/0.0.1360.728@0.0.1360.728" timestamp="1657733511972" />
+    <state x="490" y="73" key="#com.intellij.ide.util.MemberChooser" timestamp="1657733293822">
+      <screen x="0" y="0" width="1360" height="728" />
+    </state>
+    <state x="490" y="73" key="#com.intellij.ide.util.MemberChooser/0.0.1360.728@0.0.1360.728" timestamp="1657733293822" />
+    <state x="408" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1657732719416">
+      <screen x="0" y="0" width="1360" height="728" />
+    </state>
+    <state x="408" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1360.728@0.0.1360.728" timestamp="1657732719416" />
+    <state x="410" y="111" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1657732765334">
+      <screen x="0" y="0" width="1360" height="728" />
+    </state>
+    <state x="410" y="111" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1360.728@0.0.1360.728" timestamp="1657732765334" />
+    <state x="459" y="119" key="FileChooserDialogImpl" timestamp="1657784146667">
+      <screen x="0" y="0" width="1360" height="728" />
+    </state>
+    <state x="459" y="119" key="FileChooserDialogImpl/0.0.1360.728@0.0.1360.728" timestamp="1657784146667" />
+    <state x="381" y="188" key="com.intellij.ide.util.TipDialog" timestamp="1657781891185">
+      <screen x="0" y="0" width="1360" height="728" />
+    </state>
+    <state x="381" y="188" key="com.intellij.ide.util.TipDialog/0.0.1360.728@0.0.1360.728" timestamp="1657781891185" />
+    <state x="62" y="66" key="new project wizard" timestamp="1657732092265">
+      <screen x="0" y="0" width="1360" height="728" />
+    </state>
+    <state x="62" y="66" key="new project wizard/0.0.1360.728@0.0.1360.728" timestamp="1657732092265" />
+  </component>
+</project>

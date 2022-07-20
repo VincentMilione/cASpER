@@ -1,0 +1,35 @@
+public class Main {
+private Gestione gestore
+	static void main(){		Cliente c = new Cliente("",20);		c = gestore.scorriListaClienti();		System.out.println(c.getName+" "+c.getEtà());)		c = gestore.scorriListaClienti();		System.out.println(c.getName+" "+c.getEtà());)		c = gestore.scorriListaClienti();		System.out.println(c.getName+" "+c.getEtà());)	}
+}
+
+public class Phone {
+private final String unformattedNumber;
+   public Phone(String unformattedNumber) {
+      this.unformattedNumber = unformattedNumber;
+   }
+   public String getAreaCode() {
+      return unformattedNumber.substring(0,3);
+   }
+   public String getPrefix() {
+      return unformattedNumber.substring(3,6);
+   }
+   public String getNumber() {
+      return unformattedNumber.substring(6,10);
+   }
+}
+public class Ristorante{
+public String nome_Ristorante;
+
+	public Ristorante(String nome_Ristorante) {
+		this.nome_Ristorante = nome_Ristorante;
+	}
+
+	public String getNome_Ristorante() {
+		return nome_Ristorante;
+	}
+
+	public void setNome_Ristorante(String nome_Ristorante) {
+		this.nome_Ristorante = nome_Ristorante;
+	}
+}

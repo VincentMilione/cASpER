@@ -1,0 +1,22 @@
+
+public class Gestione {
+public Cliente scorriListaClienti() {
+		
+		ArrayList<Cliente> clienti= new ArrayList<Cliente>();
+		Cliente c= new Cliente("Lucia",30);
+		clienti.add(c);
+		c= new Cliente("Ugo",51);
+		clienti.add(c);
+		c= new Cliente("Maria",16);
+		clienti.add(c);
+		c= new Cliente("Lucia",20);
+		clienti.add(c);
+
+		int contatore=0;
+
+		for(int i=0;i<4;i++) {
+			if(clienti.get(contatore)<clienti.get(i).getEtà()){contatore=i;}
+		}	
+		return clienti.get(contatore);
+	}
+}

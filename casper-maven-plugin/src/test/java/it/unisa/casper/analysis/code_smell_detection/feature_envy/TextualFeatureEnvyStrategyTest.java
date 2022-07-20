@@ -7,6 +7,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,66 +27,21 @@ public class TextualFeatureEnvyStrategyTest {
     private ClassBeanList classes;
     private PackageBean pack;
     private List<PackageBean> listPackage = new ArrayList<PackageBean>();
+    private String path = "./src/test/input/textual/featureEnvy";
 
     @Before
-    public void setUp() {
+    public void setUp() throws IOException {
         String filename = System.getProperty("user.home") + File.separator + ".casper" + File.separator + "stopwordlist.txt";
         File stopwordlist = new File(filename);
         stopwordlist.delete();
 
         MethodBeanList vuota = new MethodList();
         HashMap<String, ClassBean> nulla = new HashMap<String, ClassBean>();
+        String packageContent = new String (Files.readAllBytes(Paths.get(path+"/package.txt")));
+        String classPhone = new String (Files.readAllBytes(Paths.get(path+"/Phone.txt")));
+        String classCustomer = new String (Files.readAllBytes(Paths.get(path+"/Customer.txt")));
         classes = new ClassList();
-        pack = new PackageBean.Builder("feature_envy.package", "public class Phone {\n" +
-                "   private final String operatore;" +
-                "private final String unformattedNumber;\n" +
-                "   public Phone(String unformattedNumber) {\n" +
-                "      this.unformattedNumber = unformattedNumber;\n" +
-                "   }\n" +
-                "   public String getAreaCode() {\n" +
-                "      return unformattedNumber.substring(0,3);\n" +
-                "   }\n" +
-                "   public String getPrefix() {\n" +
-                "      return unformattedNumber.substring(3,6);\n" +
-                "   }\n" +
-                "   public String getNumber() {\n" +
-                "      return unformattedNumber.substring(6,10);\n" +
-                "   }\n" +
-                "   public String getOperatore() {\n" +
-                "         return operatore+getAreaCode()+getPrefix()+getNumber();\n" +
-                "   }\n" +
-                "   public String reverceNumber() {\n" +
-                "      return getNumber()+getPrefix()+getAreaCode();\n" +
-                "   }\n" +
-                "   public String italianNumber() {\n" +
-                "         return \"39+\"+getNumber()+getPrefix()+getAreaCode();\n" +
-                "   }\n" +
-                "   public boolean pushNumber(){\n" +
-                "        if(getAreaCode().equals(getPrefix()))\n" +
-                "               if(getPrefix().equals(getNumber())){return false;}\n" +
-                "                  else{ unformattedNumber.replace(getNumber(),\"lol\");\n" +
-                "                        return true;\n" +
-                "                      }\n" +
-                "            else{return true;}\n" +
-                "        return false;\n" +
-                "   }" +
-                "}\n" +
-                "public class Customer{\n" +
-                "\n" +
-                "   private String name;\n" +
-                "\n" +
-                "   public Customer(String name)\n" +
-                "   {    this.name=name;\n" +
-                "   }\n" +
-                "\n" +
-                "   public String getName()\n" +
-                "   {    return name;\n" +
-                "   }\n" +
-                "\n" +
-                "   public String getMobilePhoneNumber(Phone p) {\n" +
-                "      return tel.getAreaCode()+tel.getPrefix()+tel.getNumber();\n" +
-                "    }" +
-                "}")
+        pack = new PackageBean.Builder("feature_envy.package", packageContent)
                 .setClassList(classes).build();
 
         instances = new InstanceVariableList();
@@ -91,96 +49,13 @@ public class TextualFeatureEnvyStrategyTest {
         instances.getList().add(new InstanceVariableBean("operatore", "String", "", "private final"));
         methods = new MethodList();
         MethodBeanList called = new MethodList();
-        classeE = new ClassBean.Builder("feature_envy.package.Phone", "public class Phone {\n" +
-                "   private final String operatore;" +
-                "private final String unformattedNumber;\n" +
-                "   public Phone(String unformattedNumber) {\n" +
-                "      this.unformattedNumber = unformattedNumber;\n" +
-                "   }\n" +
-                "   public String getAreaCode() {\n" +
-                "      return unformattedNumber.substring(0,3);\n" +
-                "   }\n" +
-                "   public String getPrefix() {\n" +
-                "      return unformattedNumber.substring(3,6);\n" +
-                "   }\n" +
-                "   public String getNumber() {\n" +
-                "      return unformattedNumber.substring(6,10);\n" +
-                "   }\n" +
-                "   public String getOperatore() {\n" +
-                "         return operatore+getAreaCode()+getPrefix()+getNumber();\n" +
-                "   }\n" +
-                "   public String reverceNumber() {\n" +
-                "      return getNumber()+getPrefix()+getAreaCode();\n" +
-                "   }\n" +
-                "   public String italianNumber() {\n" +
-                "         return \"39+\"+getNumber()+getPrefix()+getAreaCode();\n" +
-                "   }\n" +
-                "   public boolean pushNumber(){\n" +
-                "        if(getAreaCode().equals(getPrefix()))\n" +
-                "               if(getPrefix().equals(getNumber())){return false;}\n" +
-                "                  else{ unformattedNumber.replace(getNumber(),\"lol\");\n" +
-                "                        return true;\n" +
-                "                      }\n" +
-                "            else{return true;}\n" +
-                "        return false;\n" +
-                "   }" +
-                "}")
+        classeE = new ClassBean.Builder("feature_envy.package.Phone", classPhone)
                 .setInstanceVariables(instances)
                 .setMethods(methods)
                 .setImports(new ArrayList<String>())
                 .setLOC(12)
                 .setSuperclass(null)
-                .setBelongingPackage(new PackageBean.Builder("feature_envy.package", "public class Phone {\n" +
-                        "   private final String operatore;" +
-                        "private final String unformattedNumber;\n" +
-                        "   public Phone(String unformattedNumber) {\n" +
-                        "      this.unformattedNumber = unformattedNumber;\n" +
-                        "   }\n" +
-                        "   public String getAreaCode() {\n" +
-                        "      return unformattedNumber.substring(0,3);\n" +
-                        "   }\n" +
-                        "   public String getPrefix() {\n" +
-                        "      return unformattedNumber.substring(3,6);\n" +
-                        "   }\n" +
-                        "   public String getNumber() {\n" +
-                        "      return unformattedNumber.substring(6,10);\n" +
-                        "   }\n" +
-                        "   public String getOperatore() {\n" +
-                        "         return operatore+getAreaCode()+getPrefix()+getNumber();\n" +
-                        "   }\n" +
-                        "   public String reverceNumber() {\n" +
-                        "      return getNumber()+getPrefix()+getAreaCode();\n" +
-                        "   }\n" +
-                        "   public String italianNumber() {\n" +
-                        "         return \"39+\"+getNumber()+getPrefix()+getAreaCode();\n" +
-                        "   }\n" +
-                        "   public boolean pushNumber(){\n" +
-                        "        if(getAreaCode().equals(getPrefix()))\n" +
-                        "               if(getPrefix().equals(getNumber())){return false;}\n" +
-                        "                  else{ unformattedNumber.replace(getNumber(),\"lol\");\n" +
-                        "                        return true;\n" +
-                        "                      }\n" +
-                        "            else{return true;}\n" +
-                        "        return false;\n" +
-                        "   }" +
-                        "}" +
-                        "\n" +
-                        "public class Customer{\n" +
-                        "\n" +
-                        "   private String name;\n" +
-                        "\n" +
-                        "   public Customer(String name)\n" +
-                        "   {    this.name=name;\n" +
-                        "   }\n" +
-                        "\n" +
-                        "   public String getName()\n" +
-                        "   {    return name;\n" +
-                        "   }\n" +
-                        "\n" +
-                        "   public String getMobilePhoneNumber(Phone p) {\n" +
-                        "      return tel.getAreaCode()+tel.getPrefix()+tel.getNumber();\n" +
-                        "    }" +
-                        "}")
+                .setBelongingPackage(new PackageBean.Builder("feature_envy.package", packageContent)
                         .build())
                 .setEnviedPackage(null)
                 .setEntityClassUsage(10)
@@ -198,38 +73,7 @@ public class TextualFeatureEnvyStrategyTest {
                 .setParameters(hash)
                 .setStaticMethod(false)
                 .setDefaultCostructor(true)
-                .setBelongingClass(new ClassBean.Builder("feature_envy.package.Phone", "private final String unformattedNumber;\n" +
-                        "   private final String operatore;" +
-                        "public Phone(String unformattedNumber) {\n" +
-                        "      this.unformattedNumber = unformattedNumber;\n" +
-                        "   }\n" +
-                        "   public String getAreaCode() {\n" +
-                        "      return unformattedNumber.substring(0,3);\n" +
-                        "   }\n" +
-                        "   public String getPrefix() {\n" +
-                        "      return unformattedNumber.substring(3,6);\n" +
-                        "   }\n" +
-                        "   public String getNumber() {\n" +
-                        "      return unformattedNumber.substring(6,10);\n" +
-                        "   }\n" +
-                        "   public String getOperatore() {\n" +
-                        "         return operatore+getAreaCode()+getPrefix()+getNumber();\n" +
-                        "   }\n" +
-                        "   public String reverceNumber() {\n" +
-                        "      return getNumber()+getPrefix()+getAreaCode();\n" +
-                        "   }\n" +
-                        "   public String italianNumber() {\n" +
-                        "         return \"39+\"+getNumber()+getPrefix()+getAreaCode();\n" +
-                        "   }\n" +
-                        "   public boolean pushNumber(){\n" +
-                        "        if(getAreaCode().equals(getPrefix()))\n" +
-                        "               if(getPrefix().equals(getNumber())){return false;}\n" +
-                        "                  else{ unformattedNumber.replace(getNumber(),\"lol\");\n" +
-                        "                        return true;\n" +
-                        "                      }\n" +
-                        "            else{return true;}\n" +
-                        "        return false;\n" +
-                        "   }").build())
+                .setBelongingClass(new ClassBean.Builder("feature_envy.package.Phone", classPhone).build())
                 .setVisibility("public")
                 .setAffectedSmell()
                 .build();
@@ -242,32 +86,7 @@ public class TextualFeatureEnvyStrategyTest {
                 .setParameters(nulla)
                 .setStaticMethod(false)
                 .setDefaultCostructor(false)
-                .setBelongingClass(new ClassBean.Builder("feature_envy.package.Phone", "private final String unformattedNumber;\n" +
-                        "   private final String operatore;" +
-                        "public Phone(String unformattedNumber) {\n" +
-                        "      this.unformattedNumber = unformattedNumber;\n" +
-                        "   }\n" +
-                        "   public String getAreaCode() {\n" +
-                        "      return unformattedNumber.substring(0,3);\n" +
-                        "   }\n" +
-                        "   public String getPrefix() {\n" +
-                        "      return unformattedNumber.substring(3,6);\n" +
-                        "   }\n" +
-                        "   public String getNumber() {\n" +
-                        "      return unformattedNumber.substring(6,10);\n" +
-                        "   }\n" +
-                        "   public String getOperatore() {\n" +
-                        "         return operatore+getAreaCode()+getPrefix()+getNumber();\n" +
-                        "   }\n" +
-                        "   public boolean pushNumber(){\n" +
-                        "        if(getAreaCode().equals(getPrefix()))\n" +
-                        "               if(getPrefix().equals(getNumber())){return false;}\n" +
-                        "                  else{ unformattedNumber.replace(getNumber(),\"lol\");\n" +
-                        "                        return true;\n" +
-                        "                      }\n" +
-                        "            else{return true;}\n" +
-                        "        return false;\n" +
-                        "   }").build())
+                .setBelongingClass(new ClassBean.Builder("feature_envy.package.Phone", classPhone).build())
                 .setVisibility("public")
                 .setAffectedSmell()
                 .build();
@@ -281,32 +100,7 @@ public class TextualFeatureEnvyStrategyTest {
                 .setParameters(nulla)
                 .setStaticMethod(false)
                 .setDefaultCostructor(false)
-                .setBelongingClass(new ClassBean.Builder("feature_envy.package.Phone", "private final String unformattedNumber;\n" +
-                        "   private final String operatore;" +
-                        "public Phone(String unformattedNumber) {\n" +
-                        "      this.unformattedNumber = unformattedNumber;\n" +
-                        "   }\n" +
-                        "   public String getAreaCode() {\n" +
-                        "      return unformattedNumber.substring(0,3);\n" +
-                        "   }\n" +
-                        "   public String getPrefix() {\n" +
-                        "      return unformattedNumber.substring(3,6);\n" +
-                        "   }\n" +
-                        "   public String getNumber() {\n" +
-                        "      return unformattedNumber.substring(6,10);\n" +
-                        "   }\n" +
-                        "   public String getOperatore() {\n" +
-                        "         return operatore+getAreaCode()+getPrefix()+getNumber();\n" +
-                        "   }\n" +
-                        "   public boolean pushNumber(){\n" +
-                        "        if(getAreaCode().equals(getPrefix()))\n" +
-                        "               if(getPrefix().equals(getNumber())){return false;}\n" +
-                        "                  else{ unformattedNumber.replace(getNumber(),\"lol\");\n" +
-                        "                        return true;\n" +
-                        "                      }\n" +
-                        "            else{return true;}\n" +
-                        "        return false;\n" +
-                        "   }").build())
+                .setBelongingClass(new ClassBean.Builder("feature_envy.package.Phone", classPhone).build())
                 .setVisibility("public")
                 .build();
         classeE.addMethodBeanList(metodo);
@@ -319,38 +113,7 @@ public class TextualFeatureEnvyStrategyTest {
                 .setParameters(nulla)
                 .setStaticMethod(false)
                 .setDefaultCostructor(false)
-                .setBelongingClass(new ClassBean.Builder("feature_envy.package.Phone", "private final String unformattedNumber;\n" +
-                        "   private final String operatore;" +
-                        "public Phone(String unformattedNumber) {\n" +
-                        "      this.unformattedNumber = unformattedNumber;\n" +
-                        "   }\n" +
-                        "   public String getAreaCode() {\n" +
-                        "      return unformattedNumber.substring(0,3);\n" +
-                        "   }\n" +
-                        "   public String getPrefix() {\n" +
-                        "      return unformattedNumber.substring(3,6);\n" +
-                        "   }\n" +
-                        "   public String getNumber() {\n" +
-                        "      return unformattedNumber.substring(6,10);\n" +
-                        "   }\n" +
-                        "   public String getOperatore() {\n" +
-                        "         return operatore+getAreaCode()+getPrefix()+getNumber();\n" +
-                        "   }\n" +
-                        "   public String reverceNumber() {\n" +
-                        "      return getNumber()+getPrefix()+getAreaCode();\n" +
-                        "   }\n" +
-                        "   public String italianNumber() {\n" +
-                        "         return \"39+\"+getNumber()+getPrefix()+getAreaCode();\n" +
-                        "   }\n" +
-                        "   public boolean pushNumber(){\n" +
-                        "        if(getAreaCode().equals(getPrefix()))\n" +
-                        "               if(getPrefix().equals(getNumber())){return false;}\n" +
-                        "                  else{ unformattedNumber.replace(getNumber(),\"lol\");\n" +
-                        "                        return true;\n" +
-                        "                      }\n" +
-                        "            else{return true;}\n" +
-                        "        return false;\n" +
-                        "   }").build())
+                .setBelongingClass(new ClassBean.Builder("feature_envy.package.Phone", classPhone).build())
                 .setVisibility("public")
                 .setAffectedSmell()
                 .build();
@@ -363,38 +126,7 @@ public class TextualFeatureEnvyStrategyTest {
                 .setParameters(nulla)
                 .setStaticMethod(false)
                 .setDefaultCostructor(false)
-                .setBelongingClass(new ClassBean.Builder("feature_envy.package.Phone", "private final String unformattedNumber;\n" +
-                        "   private final String operatore;" +
-                        "public Phone(String unformattedNumber) {\n" +
-                        "      this.unformattedNumber = unformattedNumber;\n" +
-                        "   }\n" +
-                        "   public String getAreaCode() {\n" +
-                        "      return unformattedNumber.substring(0,3);\n" +
-                        "   }\n" +
-                        "   public String getPrefix() {\n" +
-                        "      return unformattedNumber.substring(3,6);\n" +
-                        "   }\n" +
-                        "   public String getNumber() {\n" +
-                        "      return unformattedNumber.substring(6,10);\n" +
-                        "   }\n" +
-                        "   public String getOperatore() {\n" +
-                        "         return operatore+getAreaCode()+getPrefix()+getNumber();\n" +
-                        "   }\n" +
-                        "   public String reverceNumber() {\n" +
-                        "      return getNumber()+getPrefix()+getAreaCode();\n" +
-                        "   }\n" +
-                        "   public String italianNumber() {\n" +
-                        "         return \"39+\"+getNumber()+getPrefix()+getAreaCode();\n" +
-                        "   }\n" +
-                        "   public boolean pushNumber(){\n" +
-                        "        if(getAreaCode().equals(getPrefix()))\n" +
-                        "               if(getPrefix().equals(getNumber())){return false;}\n" +
-                        "                  else{ unformattedNumber.replace(getNumber(),\"lol\");\n" +
-                        "                        return true;\n" +
-                        "                      }\n" +
-                        "            else{return true;}\n" +
-                        "        return false;\n" +
-                        "   }").build())
+                .setBelongingClass(new ClassBean.Builder("feature_envy.package.Phone", classPhone).build())
                 .setVisibility("public")
                 .setAffectedSmell()
                 .build();
@@ -407,38 +139,7 @@ public class TextualFeatureEnvyStrategyTest {
                 .setParameters(nulla)
                 .setStaticMethod(false)
                 .setDefaultCostructor(false)
-                .setBelongingClass(new ClassBean.Builder("feature_envy.package.Phone", "private final String unformattedNumber;\n" +
-                        "   private final String operatore;" +
-                        "public Phone(String unformattedNumber) {\n" +
-                        "      this.unformattedNumber = unformattedNumber;\n" +
-                        "   }\n" +
-                        "   public String getAreaCode() {\n" +
-                        "      return unformattedNumber.substring(0,3);\n" +
-                        "   }\n" +
-                        "   public String getPrefix() {\n" +
-                        "      return unformattedNumber.substring(3,6);\n" +
-                        "   }\n" +
-                        "   public String getNumber() {\n" +
-                        "      return unformattedNumber.substring(6,10);\n" +
-                        "   }\n" +
-                        "   public String getOperatore() {\n" +
-                        "         return operatore+getAreaCode()+getPrefix()+getNumber();\n" +
-                        "   }\n" +
-                        "   public String reverceNumber() {\n" +
-                        "      return getNumber()+getPrefix()+getAreaCode();\n" +
-                        "   }\n" +
-                        "   public String italianNumber() {\n" +
-                        "         return \"39+\"+getNumber()+getPrefix()+getAreaCode();\n" +
-                        "   }\n" +
-                        "   public boolean pushNumber(){\n" +
-                        "        if(getAreaCode().equals(getPrefix()))\n" +
-                        "               if(getPrefix().equals(getNumber())){return false;}\n" +
-                        "                  else{ unformattedNumber.replace(getNumber(),\"lol\");\n" +
-                        "                        return true;\n" +
-                        "                      }\n" +
-                        "            else{return true;}\n" +
-                        "        return false;\n" +
-                        "   }").build())
+                .setBelongingClass(new ClassBean.Builder("feature_envy.package.Phone", classPhone).build())
                 .setVisibility("public")
                 .setAffectedSmell()
                 .build();
@@ -452,38 +153,7 @@ public class TextualFeatureEnvyStrategyTest {
                 .setParameters(nulla)
                 .setStaticMethod(false)
                 .setDefaultCostructor(false)
-                .setBelongingClass(new ClassBean.Builder("feature_envy.package.Phone", "private final String unformattedNumber;\n" +
-                        "   private final String operatore;" +
-                        "public Phone(String unformattedNumber) {\n" +
-                        "      this.unformattedNumber = unformattedNumber;\n" +
-                        "   }\n" +
-                        "   public String getAreaCode() {\n" +
-                        "      return unformattedNumber.substring(0,3);\n" +
-                        "   }\n" +
-                        "   public String getPrefix() {\n" +
-                        "      return unformattedNumber.substring(3,6);\n" +
-                        "   }\n" +
-                        "   public String getNumber() {\n" +
-                        "      return unformattedNumber.substring(6,10);\n" +
-                        "   }\n" +
-                        "   public String getOperatore() {\n" +
-                        "         return operatore+getAreaCode()+getPrefix()+getNumber();\n" +
-                        "   }\n" +
-                        "   public String reverceNumber() {\n" +
-                        "      return getNumber()+getPrefix()+getAreaCode();\n" +
-                        "   }\n" +
-                        "   public String italianNumber() {\n" +
-                        "         return \"39+\"+getNumber()+getPrefix()+getAreaCode();\n" +
-                        "   }\n" +
-                        "   public boolean pushNumber(){\n" +
-                        "        if(getAreaCode().equals(getPrefix()))\n" +
-                        "               if(getPrefix().equals(getNumber())){return false;}\n" +
-                        "                  else{ unformattedNumber.replace(getNumber(),\"lol\");\n" +
-                        "                        return true;\n" +
-                        "                      }\n" +
-                        "            else{return true;}\n" +
-                        "        return false;\n" +
-                        "   }").build())
+                .setBelongingClass(new ClassBean.Builder("feature_envy.package.Phone", classPhone).build())
                 .setVisibility("public")
                 .setAffectedSmell()
                 .build();
@@ -502,38 +172,7 @@ public class TextualFeatureEnvyStrategyTest {
                 .setParameters(nulla)
                 .setStaticMethod(false)
                 .setDefaultCostructor(false)
-                .setBelongingClass(new ClassBean.Builder("feature_envy.package.Phone", "private final String unformattedNumber;\n" +
-                        "   private final String operatore;" +
-                        "public Phone(String unformattedNumber) {\n" +
-                        "      this.unformattedNumber = unformattedNumber;\n" +
-                        "   }\n" +
-                        "   public String getAreaCode() {\n" +
-                        "      return unformattedNumber.substring(0,3);\n" +
-                        "   }\n" +
-                        "   public String getPrefix() {\n" +
-                        "      return unformattedNumber.substring(3,6);\n" +
-                        "   }\n" +
-                        "   public String getNumber() {\n" +
-                        "      return unformattedNumber.substring(6,10);\n" +
-                        "   }\n" +
-                        "   public String getOperatore() {\n" +
-                        "         return operatore+getAreaCode()+getPrefix()+getNumber();\n" +
-                        "   }\n" +
-                        "   public String reverceNumber() {\n" +
-                        "      return getNumber()+getPrefix()+getAreaCode();\n" +
-                        "   }\n" +
-                        "   public String italianNumber() {\n" +
-                        "         return \"39+\"+getNumber()+getPrefix()+getAreaCode();\n" +
-                        "   }\n" +
-                        "   public boolean pushNumber(){\n" +
-                        "        if(getAreaCode().equals(getPrefix()))\n" +
-                        "               if(getPrefix().equals(getNumber())){return false;}\n" +
-                        "                  else{ unformattedNumber.replace(getNumber(),\"lol\");\n" +
-                        "                        return true;\n" +
-                        "                      }\n" +
-                        "            else{return true;}\n" +
-                        "        return false;\n" +
-                        "   }").build())
+                .setBelongingClass(new ClassBean.Builder("feature_envy.package.Phone", classPhone).build())
                 .setVisibility("public")
                 .build();
         classeE.addMethodBeanList(metodo);
@@ -542,76 +181,13 @@ public class TextualFeatureEnvyStrategyTest {
         instances = new InstanceVariableList();
         methods = new MethodList();
         instances.getList().add(new InstanceVariableBean("name", "String", "", "private"));
-        classe = new ClassBean.Builder("feature_envy.package.Customer", "private String name;\n" +
-                "\n" +
-                "   public Customer(String name)\n" +
-                "   {    this.name=name;\n" +
-                "   }\n" +
-                "\n" +
-                "   public String getName()\n" +
-                "   {    return name;\n" +
-                "   }\n" +
-                "\n" +
-                "   public String getMobilePhoneNumber(Phone p) {\n" +
-                "      return tel.getAreaCode()+tel.getPrefix()+tel.getNumber();\n" +
-                "    }" +
-                "}")
+        classe = new ClassBean.Builder("feature_envy.package.Customer", classCustomer)
                 .setInstanceVariables(instances)
                 .setMethods(methods)
                 .setImports(new ArrayList<String>())
                 .setLOC(15)
                 .setSuperclass(null)
-                .setBelongingPackage(new PackageBean.Builder("feature_envy.package", "public class Phone {\n" +
-                        "   private final String unformattedNumber;\n" +
-                        "   private final String operatore;" +
-                        "public Phone(String unformattedNumber) {\n" +
-                        "      this.unformattedNumber = unformattedNumber;\n" +
-                        "   }\n" +
-                        "   public String getAreaCode() {\n" +
-                        "      return unformattedNumber.substring(0,3);\n" +
-                        "   }\n" +
-                        "   public String getPrefix() {\n" +
-                        "      return unformattedNumber.substring(3,6);\n" +
-                        "   }\n" +
-                        "   public String getNumber() {\n" +
-                        "      return unformattedNumber.substring(6,10);\n" +
-                        "   }\n" +
-                        "   public String getOperatore() {\n" +
-                        "         return operatore+getAreaCode()+getPrefix()+getNumber();\n" +
-                        "   }\n" +
-                        "   public String reverceNumber() {\n" +
-                        "      return getNumber()+getPrefix()+getAreaCode();\n" +
-                        "   }\n" +
-                        "   public String italianNumber() {\n" +
-                        "         return \"39+\"+getNumber()+getPrefix()+getAreaCode();\n" +
-                        "   }\n" +
-                        "   public boolean pushNumber(){\n" +
-                        "        if(getAreaCode().equals(getPrefix()))\n" +
-                        "               if(getPrefix().equals(getNumber())){return false;}\n" +
-                        "                  else{ unformattedNumber.replace(getNumber(),\"lol\");\n" +
-                        "                        return true;\n" +
-                        "                      }\n" +
-                        "            else{return true;}\n" +
-                        "        return false;\n" +
-                        "   }" +
-                        "}" +
-                        "\n" +
-                        "public class Customer{\n" +
-                        "\n" +
-                        "   private String name;\n" +
-                        "\n" +
-                        "   public Customer(String name)\n" +
-                        "   {    this.name=name;\n" +
-                        "   }\n" +
-                        "\n" +
-                        "   public String getName()\n" +
-                        "   {    return name;\n" +
-                        "   }\n" +
-                        "\n" +
-                        "   public String getMobilePhoneNumber(Phone p) {\n" +
-                        "      return tel.getAreaCode()+tel.getPrefix()+tel.getNumber();\n" +
-                        "    }" +
-                        "}")
+                .setBelongingPackage(new PackageBean.Builder("feature_envy.package", packageContent)
                         .build())
                 .setEnviedPackage(null)
                 .setEntityClassUsage(0)
@@ -626,20 +202,7 @@ public class TextualFeatureEnvyStrategyTest {
                 .setParameters(nulla)
                 .setStaticMethod(false)
                 .setDefaultCostructor(true)
-                .setBelongingClass(new ClassBean.Builder("feature_envy.package.Customer", "private String name;\n" +
-                        "\n" +
-                        "   public Customer(String name)\n" +
-                        "   {    this.name=name;\n" +
-                        "   }\n" +
-                        "\n" +
-                        "   public String getName()\n" +
-                        "   {    return name;\n" +
-                        "   }\n" +
-                        "\n" +
-                        "   public String getMobilePhoneNumber(Phone p) {\n" +
-                        "      return tel.getAreaCode()+tel.getPrefix()+tel.getNumber();\n" +
-                        "    }" +
-                        "}")
+                .setBelongingClass(new ClassBean.Builder("feature_envy.package.Customer", classCustomer)
                         .build())
                 .setVisibility("public")
                 .setAffectedSmell()
@@ -653,20 +216,7 @@ public class TextualFeatureEnvyStrategyTest {
                 .setParameters(nulla)
                 .setStaticMethod(false)
                 .setDefaultCostructor(false)
-                .setBelongingClass(new ClassBean.Builder("feature_envy.package.Customer", "private String name;\n" +
-                        "\n" +
-                        "   public Customer(String name)\n" +
-                        "   {    this.name=name;\n" +
-                        "   }\n" +
-                        "\n" +
-                        "   public String getName()\n" +
-                        "   {    return name;\n" +
-                        "   }\n" +
-                        "\n" +
-                        "   public String getMobilePhoneNumber(Phone p) {\n" +
-                        "      return tel.getAreaCode()+tel.getPrefix()+tel.getNumber();\n" +
-                        "    }" +
-                        "}")
+                .setBelongingClass(new ClassBean.Builder("feature_envy.package.Customer", classCustomer)
                         .build())
                 .setVisibility("public")
                 .setAffectedSmell()
@@ -682,20 +232,7 @@ public class TextualFeatureEnvyStrategyTest {
                 .setParameters(hash)
                 .setStaticMethod(false)
                 .setDefaultCostructor(false)
-                .setBelongingClass(new ClassBean.Builder("feature_envy.package.Customer", "private String name;\n" +
-                        "\n" +
-                        "   public Customer(String name)\n" +
-                        "   {    this.name=name;\n" +
-                        "   }\n" +
-                        "\n" +
-                        "   public String getName()\n" +
-                        "   {    return name;\n" +
-                        "   }\n" +
-                        "\n" +
-                        "   public String getMobilePhoneNumber(Phone p) {\n" +
-                        "      return tel.getAreaCode()+tel.getPrefix()+tel.getNumber();\n" +
-                        "    }" +
-                        "}")
+                .setBelongingClass(new ClassBean.Builder("feature_envy.package.Customer", classCustomer)
                         .build())
                 .setVisibility("public")
                 .setAffectedSmell()

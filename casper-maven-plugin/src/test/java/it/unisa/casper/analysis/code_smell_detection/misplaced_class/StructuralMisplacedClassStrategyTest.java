@@ -6,6 +6,9 @@ import it.unisa.casper.storage.beans.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,26 +25,18 @@ public class StructuralMisplacedClassStrategyTest {
     private ClassBean noSmelly, smelly;
     private ClassBeanList classes;
     private PackageBean pack, packE;
+    private String path = "./src/test/input/structural/misplaced";
 
     @Before
-    public void setUp() {
+    public void setUp() throws IOException {
+        String packageContent1 = new String (Files.readAllBytes(Paths.get(path+"/package1.txt")));
+        String packageContent2 = new String (Files.readAllBytes(Paths.get(path+"/package2.txt")));
+        String classGestione = new String (Files.readAllBytes(Paths.get(path+"/Gestione.txt")));
+        String classCliente = new String (Files.readAllBytes(Paths.get(path+"/Cliente.txt")));
+
         classes = new ClassList();
         MethodBeanList vuoto = new MethodList();
-        pack = new PackageBean.Builder("misplaced_class.package", "public class Cliente {\n" +
-                "\n" +
-                "\tprivate String name;\n" +
-                "\tprivate int età;\n" +
-                "\t\n" +
-                "\tpublic Cliente(String name, int età) {\n" +
-                "\t\tthis.name = name;\n" +
-                "\t\tthis.età = età;\n" +
-                "\t}\n" +
-                "\tpublic String getName() {\n" +
-                "\t\treturn name;\n" +
-                "\t}\n" +
-                "\tpublic int getEtà() {\n" +
-                "\t\treturn età;\n" +
-                "\t}}").setClassList(classes).build();
+        pack = new PackageBean.Builder("misplaced_class.package", packageContent1).setClassList(classes).build();
 
         InstanceVariableBeanList instances = new InstanceVariableList();
         instances.getList().add(new InstanceVariableBean("name", "String", "", "private "));
@@ -49,39 +44,13 @@ public class StructuralMisplacedClassStrategyTest {
         methods = new MethodList();
         List<String> imports = new ArrayList<String>();
         MethodBeanList called = new MethodList();
-        smelly = new ClassBean.Builder("misplaced_class.package.Cliente", "private String name;\n" +
-                "\tprivate int età;\n" +
-                "\t\n" +
-                "\tpublic Cliente(String name, int età) {\n" +
-                "\t\tthis.name = name;\n" +
-                "\t\tthis.età = età;\n" +
-                "\t}\n" +
-                "\tpublic String getName() {\n" +
-                "\t\treturn name;\n" +
-                "\t}\n" +
-                "\tpublic int getEtà() {\n" +
-                "\t\treturn età;\n" +
-                "\t}")
+        smelly = new ClassBean.Builder("misplaced_class.package.Cliente", classCliente)
                 .setInstanceVariables(instances)
                 .setMethods(methods)
                 .setImports(imports)
                 .setLOC(12)
                 .setSuperclass(null)
-                .setBelongingPackage(new PackageBean.Builder("misplaced_class.package", "public class Cliente {\n" +
-                        "\n" +
-                        "\tprivate String name;\n" +
-                        "\tprivate int età;\n" +
-                        "\t\n" +
-                        "\tpublic Cliente(String name, int età) {\n" +
-                        "\t\tthis.name = name;\n" +
-                        "\t\tthis.età = età;\n" +
-                        "\t}\n" +
-                        "\tpublic String getName() {\n" +
-                        "\t\treturn name;\n" +
-                        "\t}\n" +
-                        "\tpublic int getEtà() {\n" +
-                        "\t\treturn età;\n" +
-                        "\t}}").build())
+                .setBelongingPackage(new PackageBean.Builder("misplaced_class.package", packageContent1).build())
                 .setEnviedPackage(null)
                 .setEntityClassUsage(8)
                 .setPathToFile("C:\\Users\\Simone\\Desktop\\IdeaProjects\\Code\\testData\\misplaced_class\\package")
@@ -101,7 +70,7 @@ public class StructuralMisplacedClassStrategyTest {
                 .setParameters(hash)
                 .setStaticMethod(false)
                 .setDefaultCostructor(true)
-                .setBelongingClass(new ClassBean.Builder("misplaced_class.package.Cliente", "").build())
+                .setBelongingClass(new ClassBean.Builder("misplaced_class.package.Cliente", classCliente).build())
                 .setVisibility("public")
                 .setAffectedSmell()
                 .build();
@@ -116,7 +85,7 @@ public class StructuralMisplacedClassStrategyTest {
                 .setParameters(nulla)
                 .setStaticMethod(false)
                 .setDefaultCostructor(false)
-                .setBelongingClass(new ClassBean.Builder("misplaced_class.package.Cliente", "").build())
+                .setBelongingClass(new ClassBean.Builder("misplaced_class.package.Cliente", classCliente).build())
                 .setVisibility("public")
                 .setAffectedSmell()
                 .build();
@@ -131,7 +100,7 @@ public class StructuralMisplacedClassStrategyTest {
                 .setParameters(nulla)
                 .setStaticMethod(false)
                 .setDefaultCostructor(false)
-                .setBelongingClass(new ClassBean.Builder("misplaced_class.package.Cliente", "").build())
+                .setBelongingClass(new ClassBean.Builder("misplaced_class.package.Cliente", classCliente).build())
                 .setVisibility("public")
                 .setAffectedSmell()
                 .build();
@@ -144,31 +113,24 @@ public class StructuralMisplacedClassStrategyTest {
         instances = new InstanceVariableList();
         methods = new MethodList();
         classes = new ClassList();
-        packE = new PackageBean.Builder("misplaced_class.package2", "public Cliente scorriListaClienti() {\n" +
-                "\t\t\n" +
-                "\t\tArrayList<Cliente> clienti= new ArrayList<Cliente>();\n" +
-                "\t\tCliente c= new Cliente(\"Lucia\",30);\n" +
-                "\t\tclienti.add(c);\n" +
-                "\t\tc= new Cliente(\"Ugo\",51);\n" +
-                "\t\tclienti.add(c);\n" +
-                "\t\tc= new Cliente(\"Maria\",16);\n" +
-                "\t\tclienti.add(c);\n" +
-                "\t\tc= new Cliente(\"Lucia\",20);\n" +
-                "\t\tclienti.add(c);\n" +
-                "\n" +
-                "\t\tint contatore=0;\n" +
-                "\n" +
-                "\t\tfor(int i=0;i<4;i++) {\n" +
-                "\t\t\tif(clienti.get(contatore)<clienti.get(i).getEtà()){contatore=i;}\n" +
-                "\t\t}\t\n" +
-                "\t\treturn clienti.get(contatore);\n" +
-                "\t}").setClassList(classes).build();
+        packE = new PackageBean.Builder("misplaced_class.package2", packageContent2).setClassList(classes).build();
 
         instances = new InstanceVariableList();
         methods = new MethodList();
-        noSmelly = new ClassBean.Builder("misplaced_class.package2.Gestione", "public Cliente scorriListaClienti() {\n" +
-                "\t\t\n" +
-                "\t\tArrayList<Cliente> clienti= new ArrayList<Cliente>();\n" +
+        noSmelly = new ClassBean.Builder("misplaced_class.package2.Gestione", classGestione)
+                .setInstanceVariables(instances)
+                .setMethods(methods)
+                .setImports(imports)
+                .setLOC(18)
+                .setSuperclass(null)
+                .setBelongingPackage(new PackageBean.Builder("misplaced_class.package2", packageContent2).build())
+                .setEnviedPackage(null)
+                .setEntityClassUsage(0)
+                .setPathToFile("C:\\Users\\Simone\\Desktop\\IdeaProjects\\Code\\testData\\misplaced_class\\package2")
+                .setAffectedSmell()
+                .build();
+
+        metodo = new MethodBean.Builder("misplaced_class.package2.Gestione.scorriListaClienti", "ArrayList<Cliente> clienti= new ArrayList<Cliente>();\n" +
                 "\t\tCliente c= new Cliente(\"Lucia\",\"Abagnale\",30);\n" +
                 "\t\tclienti.add(c);\n" +
                 "\t\tc= new Cliente(\"Ugo\",51);\n" +
@@ -183,43 +145,14 @@ public class StructuralMisplacedClassStrategyTest {
                 "\t\tfor(int i=0;i<4;i++) {\n" +
                 "\t\t\tif(clienti.get(contatore)<clienti.get(i).getEtà()){contatore=i;}\n" +
                 "\t\t}\t\n" +
-                "\t\treturn clienti.get(contatore);\n" +
-                "\t}")
-                .setInstanceVariables(instances)
-                .setMethods(methods)
-                .setImports(imports)
-                .setLOC(18)
-                .setSuperclass(null)
-                .setBelongingPackage(new PackageBean.Builder("misplaced_class.package2", "").build())
-                .setEnviedPackage(null)
-                .setEntityClassUsage(0)
-                .setPathToFile("C:\\Users\\Simone\\Desktop\\IdeaProjects\\Code\\testData\\misplaced_class\\package2")
-                .setAffectedSmell()
-                .build();
-
-        metodo = new MethodBean.Builder("misplaced_class.package2.Gestione.getMobilePhoneNumber", "ArrayList<Cliente> clienti= new ArrayList<Cliente>();\n" +
-                "\t\tCliente c= new Cliente(\"Lucia\",30);\n" +
-                "\t\tclienti.add(c);\n" +
-                "\t\tc= new Cliente(\"Ugo\",51);\n" +
-                "\t\tclienti.add(c);\n" +
-                "\t\tc= new Cliente(\"Maria\",16);\n" +
-                "\t\tclienti.add(c);\n" +
-                "\t\tc= new Cliente(\"Lucia\",20);\n" +
-                "\t\tclienti.add(c);\n" +
-                "\n" +
-                "\t\tint contatore=0;\n" +
-                "\n" +
-                "\t\tfor(int i=0;i<4;i++) {\n" +
-                "\t\t\tif(clienti.get(contatore)<clienti.get(i).getEtà()){contatore=i;}\n" +
-                "\t\t}\t\n" +
                 "\t\treturn clienti.get(contatore);")
-                .setReturnType(new ClassBean.Builder("Cliente", "").build())
+                .setReturnType(new ClassBean.Builder("Cliente", classCliente).build())
                 .setInstanceVariableList(instances)
                 .setMethodsCalls(called)
                 .setParameters(nulla)
                 .setStaticMethod(false)
                 .setDefaultCostructor(false)
-                .setBelongingClass(new ClassBean.Builder("misplaced_class.package2.Gestione ", "").build())
+                .setBelongingClass(new ClassBean.Builder("misplaced_class.package2.Gestione ", classGestione).build())
                 .setVisibility("public")
                 .setAffectedSmell()
                 .build();

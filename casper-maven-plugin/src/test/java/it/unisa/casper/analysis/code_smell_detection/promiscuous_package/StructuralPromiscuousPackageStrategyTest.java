@@ -6,6 +6,9 @@ import it.unisa.casper.storage.beans.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,79 +24,25 @@ public class StructuralPromiscuousPackageStrategyTest {
     private MethodBean metodo;
     private ClassBean classe;
     private PackageBean smelly, noSmelly;
+    private String path = "./src/test/input/structural/promiscuos";
 
     @Before
-    public void setUp() {
+    public void setUp() throws IOException {
+        String packageContent1 = new String (Files.readAllBytes(Paths.get(path+"/package1.txt")));
+        String packageContent2 = new String (Files.readAllBytes(Paths.get(path+"/package2.txt")));
+        String classPhone = new String (Files.readAllBytes(Paths.get(path+"/Phone.txt")));
+        String classRistorante = new String (Files.readAllBytes(Paths.get(path+"/Ristorante.txt")));
+        String classCliente = new String (Files.readAllBytes(Paths.get(path+"/Cliente.txt")));
+        String classBankAccount = new String (Files.readAllBytes(Paths.get(path+"/BankAccount.txt")));
         InstanceVariableBeanList instances;
         MethodBeanList vuota = new MethodList();
         HashMap<String, ClassBean> nulla = new HashMap<String, ClassBean>();
 
-        noSmelly = new PackageBean.Builder("promiscuous_package.package2", "public class BankAccount {\n" +
-                "\n" +
-                "    private double balance;\n" +
-                "\n" +
-                "    public BankAccount(double balance) {\n" +
-                "        this.balance = balance;\n" +
-                "    }\n" +
-                "\n" +
-                "    public double getBalance() {\n" +
-                "        return balance;\n" +
-                "    }\n" +
-                "\n" +
-                "}")
+        noSmelly = new PackageBean.Builder("promiscuous_package.package2", packageContent2)
                 .setClassList(new ClassList())
                 .build();
 
-        String testo = "public class Ristorante {\n" +
-                "\n" +
-                "\tpublic String nome_Ristorante;\n" +
-                "\n" +
-                "\tpublic Ristorante(String nome_Ristorante) {\n" +
-                "\t\tthis.nome_Ristorante = nome_Ristorante;\n" +
-                "\t}\n" +
-                "\n" +
-                "\tpublic String getNome_Ristorante() {\n" +
-                "\t\treturn nome_Ristorante;\n" +
-                "\t}\n" +
-                "\n" +
-                "\tpublic void setNome_Ristorante(String nome_Ristorante) {\n" +
-                "\t\tthis.nome_Ristorante = nome_Ristorante;\n" +
-                "\t}\n" +
-                "\n" +
-                "}" +
-                "public class Phone {\n" +
-                "   private final String unformattedNumber;\n" +
-                "   public Phone(String unformattedNumber) {\n" +
-                "      this.unformattedNumber = unformattedNumber;\n" +
-                "   }\n" +
-                "   public String getAreaCode() {\n" +
-                "      return unformattedNumber.substring(0,3);\n" +
-                "   }\n" +
-                "   public String getPrefix() {\n" +
-                "      return unformattedNumber.substring(3,6);\n" +
-                "   }\n" +
-                "   public String getNumber() {\n" +
-                "      return unformattedNumber.substring(6,10);\n" +
-                "   }\n" +
-                "}" +
-                "public class Cliente {\n" +
-                "\n" +
-                "\tprivate String name;\n" +
-                "\tprivate int età;\n" +
-                "\n" +
-                "\tpublic Cliente(String name, int età) {\n" +
-                "\t\tthis.name = name;\n" +
-                "\t\tthis.età = età;\n" +
-                "\t}\n" +
-                "\tpublic String getName() {\n" +
-                "\t\treturn name;\n" +
-                "\t}\n" +
-                "\tpublic int getEtà() {\n" +
-                "\t\treturn età;\n" +
-                "\t}\n" +
-                "\t\n" +
-                "}";
-        smelly = new PackageBean.Builder("promiscuous_package.package", testo)
+        smelly = new PackageBean.Builder("promiscuous_package.package", packageContent1)
                 .setClassList(new ClassList())
                 .build();
 
@@ -105,25 +54,13 @@ public class StructuralPromiscuousPackageStrategyTest {
         hash.put("name", new ClassBean.Builder("String", "").build());
         hash.put("età", new ClassBean.Builder("int", "").build());
 
-        classe = new ClassBean.Builder("promiscuous_package.package.Cliente", "private String name;\n" +
-                "\tprivate int età;\n" +
-                "\n" +
-                "\tpublic Cliente(String name, int età) {\n" +
-                "\t\tthis.name = name;\n" +
-                "\t\tthis.età = età;\n" +
-                "\t}\n" +
-                "\tpublic String getName() {\n" +
-                "\t\treturn name;\n" +
-                "\t}\n" +
-                "\tpublic int getEtà() {\n" +
-                "\t\treturn età;\n" +
-                "\t}")
+        classe = new ClassBean.Builder("promiscuous_package.package.Cliente", classCliente)
                 .setInstanceVariables(instances)
                 .setMethods(methods)
                 .setImports(new ArrayList<String>())
                 .setLOC(12)
                 .setSuperclass(null)
-                .setBelongingPackage(new PackageBean.Builder("promiscuous_package.package", testo).build())
+                .setBelongingPackage(new PackageBean.Builder("promiscuous_package.package", packageContent1).build())
                 .setEnviedPackage(null)
                 .setEntityClassUsage(2)
                 .setPathToFile("C:\\Users\\Simone\\Desktop\\IdeaProjects\\Code\\testData\\promiscuous_package\\package")
@@ -138,19 +75,7 @@ public class StructuralPromiscuousPackageStrategyTest {
                 .setParameters(hash)
                 .setStaticMethod(false)
                 .setDefaultCostructor(true)
-                .setBelongingClass(new ClassBean.Builder("promiscuous_package.package.Cliente", "private String name;\n" +
-                        "\tprivate int età;\n" +
-                        "\n" +
-                        "\tpublic Cliente(String name, int età) {\n" +
-                        "\t\tthis.name = name;\n" +
-                        "\t\tthis.età = età;\n" +
-                        "\t}\n" +
-                        "\tpublic String getName() {\n" +
-                        "\t\treturn name;\n" +
-                        "\t}\n" +
-                        "\tpublic int getEtà() {\n" +
-                        "\t\treturn età;\n" +
-                        "\t}").build())
+                .setBelongingClass(new ClassBean.Builder("promiscuous_package.package.Cliente", classCliente).build())
                 .setVisibility("public")
                 .setAffectedSmell()
                 .build();
@@ -164,19 +89,7 @@ public class StructuralPromiscuousPackageStrategyTest {
                 .setParameters(nulla)
                 .setStaticMethod(false)
                 .setDefaultCostructor(false)
-                .setBelongingClass(new ClassBean.Builder("promiscuous_package.package.Cliente", "private String name;\n" +
-                        "\tprivate int età;\n" +
-                        "\n" +
-                        "\tpublic Cliente(String name, int età) {\n" +
-                        "\t\tthis.name = name;\n" +
-                        "\t\tthis.età = età;\n" +
-                        "\t}\n" +
-                        "\tpublic String getName() {\n" +
-                        "\t\treturn name;\n" +
-                        "\t}\n" +
-                        "\tpublic int getEtà() {\n" +
-                        "\t\treturn età;\n" +
-                        "\t}").build())
+                .setBelongingClass(new ClassBean.Builder("promiscuous_package.package.Cliente", classCliente).build())
                 .setVisibility("public")
                 .setAffectedSmell()
                 .build();
@@ -191,19 +104,7 @@ public class StructuralPromiscuousPackageStrategyTest {
                 .setParameters(nulla)
                 .setStaticMethod(false)
                 .setDefaultCostructor(false)
-                .setBelongingClass(new ClassBean.Builder("promiscuous_package.package.Cliente", "private String name;\n" +
-                        "\tprivate int età;\n" +
-                        "\n" +
-                        "\tpublic Cliente(String name, int età) {\n" +
-                        "\t\tthis.name = name;\n" +
-                        "\t\tthis.età = età;\n" +
-                        "\t}\n" +
-                        "\tpublic String getName() {\n" +
-                        "\t\treturn name;\n" +
-                        "\t}\n" +
-                        "\tpublic int getEtà() {\n" +
-                        "\t\treturn età;\n" +
-                        "\t}").build())
+                .setBelongingClass(new ClassBean.Builder("promiscuous_package.package.Cliente", classCliente).build())
                 .setVisibility("public")
                 .setAffectedSmell()
                 .build();
@@ -211,25 +112,13 @@ public class StructuralPromiscuousPackageStrategyTest {
         smelly.addClassList(classe);
 
         methods = new MethodList();
-        classe = new ClassBean.Builder("promiscuous_package.package.Phone", "private final String unformattedNumber;\n" +
-                "   public Phone(String unformattedNumber) {\n" +
-                "      this.unformattedNumber = unformattedNumber;\n" +
-                "   }\n" +
-                "   public String getAreaCode() {\n" +
-                "      return unformattedNumber.substring(0,3);\n" +
-                "   }\n" +
-                "   public String getPrefix() {\n" +
-                "      return unformattedNumber.substring(3,6);\n" +
-                "   }\n" +
-                "   public String getNumber() {\n" +
-                "      return unformattedNumber.substring(6,10);\n" +
-                "   }")
+        classe = new ClassBean.Builder("promiscuous_package.package.Phone", classPhone)
                 .setInstanceVariables(new InstanceVariableList())
                 .setMethods(methods)
                 .setImports(new ArrayList<String>())
                 .setLOC(11)
                 .setSuperclass(null)
-                .setBelongingPackage(new PackageBean.Builder("promiscuous_package.package", testo).build())
+                .setBelongingPackage(new PackageBean.Builder("promiscuous_package.package", packageContent1).build())
                 .setEnviedPackage(null)
                 .setEntityClassUsage(3)
                 .setPathToFile("C:\\Users\\Simone\\Desktop\\IdeaProjects\\Code\\testData\\promiscuous_package\\package")
@@ -247,19 +136,7 @@ public class StructuralPromiscuousPackageStrategyTest {
                 .setParameters(hash)
                 .setStaticMethod(false)
                 .setDefaultCostructor(false)
-                .setBelongingClass(new ClassBean.Builder("promiscuous_package.package.Phone", "private final String unformattedNumber;\n" +
-                        "   public Phone(String unformattedNumber) {\n" +
-                        "      this.unformattedNumber = unformattedNumber;\n" +
-                        "   }\n" +
-                        "   public String getAreaCode() {\n" +
-                        "      return unformattedNumber.substring(0,3);\n" +
-                        "   }\n" +
-                        "   public String getPrefix() {\n" +
-                        "      return unformattedNumber.substring(3,6);\n" +
-                        "   }\n" +
-                        "   public String getNumber() {\n" +
-                        "      return unformattedNumber.substring(6,10);\n" +
-                        "   }").build())
+                .setBelongingClass(new ClassBean.Builder("promiscuous_package.package.Phone", classPhone).build())
                 .setVisibility("public")
                 .setAffectedSmell()
                 .build();
@@ -272,19 +149,7 @@ public class StructuralPromiscuousPackageStrategyTest {
                 .setParameters(nulla)
                 .setStaticMethod(false)
                 .setDefaultCostructor(false)
-                .setBelongingClass(new ClassBean.Builder("promiscuous_package.package.Phone", "private final String unformattedNumber;\n" +
-                        "   public Phone(String unformattedNumber) {\n" +
-                        "      this.unformattedNumber = unformattedNumber;\n" +
-                        "   }\n" +
-                        "   public String getAreaCode() {\n" +
-                        "      return unformattedNumber.substring(0,3);\n" +
-                        "   }\n" +
-                        "   public String getPrefix() {\n" +
-                        "      return unformattedNumber.substring(3,6);\n" +
-                        "   }\n" +
-                        "   public String getNumber() {\n" +
-                        "      return unformattedNumber.substring(6,10);\n" +
-                        "   }").build())
+                .setBelongingClass(new ClassBean.Builder("promiscuous_package.package.Phone", classPhone).build())
                 .setVisibility("public")
                 .setAffectedSmell()
                 .build();
@@ -297,19 +162,7 @@ public class StructuralPromiscuousPackageStrategyTest {
                 .setParameters(nulla)
                 .setStaticMethod(false)
                 .setDefaultCostructor(false)
-                .setBelongingClass(new ClassBean.Builder("promiscuous_package.package.Phone", "private final String unformattedNumber;\n" +
-                        "   public Phone(String unformattedNumber) {\n" +
-                        "      this.unformattedNumber = unformattedNumber;\n" +
-                        "   }\n" +
-                        "   public String getAreaCode() {\n" +
-                        "      return unformattedNumber.substring(0,3);\n" +
-                        "   }\n" +
-                        "   public String getPrefix() {\n" +
-                        "      return unformattedNumber.substring(3,6);\n" +
-                        "   }\n" +
-                        "   public String getNumber() {\n" +
-                        "      return unformattedNumber.substring(6,10);\n" +
-                        "   }").build())
+                .setBelongingClass(new ClassBean.Builder("promiscuous_package.package.Phone", classPhone).build())
                 .setVisibility("public")
                 .setAffectedSmell()
                 .build();
@@ -322,19 +175,7 @@ public class StructuralPromiscuousPackageStrategyTest {
                 .setParameters(nulla)
                 .setStaticMethod(false)
                 .setDefaultCostructor(false)
-                .setBelongingClass(new ClassBean.Builder("promiscuous_package.package.Phone", "private final String unformattedNumber;\n" +
-                        "   public Phone(String unformattedNumber) {\n" +
-                        "      this.unformattedNumber = unformattedNumber;\n" +
-                        "   }\n" +
-                        "   public String getAreaCode() {\n" +
-                        "      return unformattedNumber.substring(0,3);\n" +
-                        "   }\n" +
-                        "   public String getPrefix() {\n" +
-                        "      return unformattedNumber.substring(3,6);\n" +
-                        "   }\n" +
-                        "   public String getNumber() {\n" +
-                        "      return unformattedNumber.substring(6,10);\n" +
-                        "   }").build())
+                .setBelongingClass(new ClassBean.Builder("promiscuous_package.package.Phone", classPhone).build())
                 .setVisibility("public")
                 .setAffectedSmell()
                 .build();
@@ -344,25 +185,13 @@ public class StructuralPromiscuousPackageStrategyTest {
         instances = new InstanceVariableList();
         instances.getList().add(new InstanceVariableBean("nome_Ristorante", "String", "", "private "));
         methods = new MethodList();
-        classe = new ClassBean.Builder("promiscuous_package.package.Ristorante", "public String nome_Ristorante;\n" +
-                "\n" +
-                "\tpublic Ristorante(String nome_Ristorante) {\n" +
-                "\t\tthis.nome_Ristorante = nome_Ristorante;\n" +
-                "\t}\n" +
-                "\n" +
-                "\tpublic String getNome_Ristorante() {\n" +
-                "\t\treturn nome_Ristorante;\n" +
-                "\t}\n" +
-                "\n" +
-                "\tpublic void setNome_Ristorante(String nome_Ristorante) {\n" +
-                "\t\tthis.nome_Ristorante = nome_Ristorante;\n" +
-                "\t}")
+        classe = new ClassBean.Builder("promiscuous_package.package.Ristorante", classRistorante)
                 .setInstanceVariables(instances)
                 .setMethods(methods)
                 .setImports(new ArrayList<String>())
                 .setLOC(12)
                 .setSuperclass(null)
-                .setBelongingPackage(new PackageBean.Builder("promiscuous_package.package", testo).build())
+                .setBelongingPackage(new PackageBean.Builder("promiscuous_package.package", packageContent1).build())
                 .setEnviedPackage(null)
                 .setEntityClassUsage(2)
                 .setPathToFile("C:\\Users\\Simone\\Desktop\\IdeaProjects\\Code\\testData\\promiscuous_package\\package\\")
@@ -378,19 +207,7 @@ public class StructuralPromiscuousPackageStrategyTest {
                 .setParameters(hash)
                 .setStaticMethod(false)
                 .setDefaultCostructor(true)
-                .setBelongingClass(new ClassBean.Builder("promiscuous_package.package.Ristorante", "public String nome_Ristorante;\n" +
-                        "\n" +
-                        "\tpublic Ristorante(String nome_Ristorante) {\n" +
-                        "\t\tthis.nome_Ristorante = nome_Ristorante;\n" +
-                        "\t}\n" +
-                        "\n" +
-                        "\tpublic String getNome_Ristorante() {\n" +
-                        "\t\treturn nome_Ristorante;\n" +
-                        "\t}\n" +
-                        "\n" +
-                        "\tpublic void setNome_Ristorante(String nome_Ristorante) {\n" +
-                        "\t\tthis.nome_Ristorante = nome_Ristorante;\n" +
-                        "\t}").build())
+                .setBelongingClass(new ClassBean.Builder("promiscuous_package.package.Ristorante", classRistorante).build())
                 .setVisibility("public")
                 .setAffectedSmell()
                 .build();
@@ -403,19 +220,7 @@ public class StructuralPromiscuousPackageStrategyTest {
                 .setParameters(nulla)
                 .setStaticMethod(false)
                 .setDefaultCostructor(false)
-                .setBelongingClass(new ClassBean.Builder("promiscuous_package.package.Ristorante", "public String nome_Ristorante;\n" +
-                        "\n" +
-                        "\tpublic Ristorante(String nome_Ristorante) {\n" +
-                        "\t\tthis.nome_Ristorante = nome_Ristorante;\n" +
-                        "\t}\n" +
-                        "\n" +
-                        "\tpublic String getNome_Ristorante() {\n" +
-                        "\t\treturn nome_Ristorante;\n" +
-                        "\t}\n" +
-                        "\n" +
-                        "\tpublic void setNome_Ristorante(String nome_Ristorante) {\n" +
-                        "\t\tthis.nome_Ristorante = nome_Ristorante;\n" +
-                        "\t}").build())
+                .setBelongingClass(new ClassBean.Builder("promiscuous_package.package.Ristorante", classRistorante).build())
                 .setVisibility("public")
                 .setAffectedSmell()
                 .build();
@@ -430,19 +235,7 @@ public class StructuralPromiscuousPackageStrategyTest {
                 .setParameters(hash)
                 .setStaticMethod(false)
                 .setDefaultCostructor(false)
-                .setBelongingClass(new ClassBean.Builder("promiscuous_package.package.Ristorante", "public String nome_Ristorante;\n" +
-                        "\n" +
-                        "\tpublic Ristorante(String nome_Ristorante) {\n" +
-                        "\t\tthis.nome_Ristorante = nome_Ristorante;\n" +
-                        "\t}\n" +
-                        "\n" +
-                        "\tpublic String getNome_Ristorante() {\n" +
-                        "\t\treturn nome_Ristorante;\n" +
-                        "\t}\n" +
-                        "\n" +
-                        "\tpublic void setNome_Ristorante(String nome_Ristorante) {\n" +
-                        "\t\tthis.nome_Ristorante = nome_Ristorante;\n" +
-                        "\t}").build())
+                .setBelongingClass(new ClassBean.Builder("promiscuous_package.package.Ristorante", classRistorante).build())
                 .setVisibility("public")
                 .setAffectedSmell()
                 .build();
@@ -452,101 +245,13 @@ public class StructuralPromiscuousPackageStrategyTest {
         instances = new InstanceVariableList();
         instances.getList().add(new InstanceVariableBean("balance", "double", "", "private "));
         methods = new MethodList();
-        classe = new ClassBean.Builder("promiscuous_package.package.BankAccount", "private double balance;\n" +
-                "\n" +
-                "    public BankAccount(double balance) {\n" +
-                "        this.balance = balance;\n" +
-                "    }\n" +
-                "\n" +
-                "    public double getBalance() {\n" +
-                "        return balance;\n" +
-                "    }\n")
+        classe = new ClassBean.Builder("promiscuous_package.package2.BankAccount", classBankAccount)
                 .setInstanceVariables(instances)
                 .setMethods(methods)
                 .setImports(new ArrayList<String>())
                 .setLOC(9)
                 .setSuperclass(null)
-                .setBelongingPackage(new PackageBean.Builder("promiscuous_package.package", testo).build())
-                .setEnviedPackage(null)
-                .setEntityClassUsage(1)
-                .setPathToFile("C:\\Users\\Simone\\Desktop\\IdeaProjects\\Code\\testData\\promiscuous_package\\package\\")
-                .setAffectedSmell()
-                .build();
-
-        hash = new HashMap<String, ClassBean>();
-        hash.put("nome_Ristorante", new ClassBean.Builder("String", "").build());
-        metodo = new MethodBean.Builder("promiscuous_package.package.BankAccount.BankAccount", "this.balance = balance;")
-                .setReturnType(new ClassBean.Builder("void", "").build())
-                .setInstanceVariableList(instances)
-                .setMethodsCalls(vuota)
-                .setParameters(hash)
-                .setStaticMethod(false)
-                .setDefaultCostructor(true)
-                .setBelongingClass(new ClassBean.Builder("promiscuous_package.package.BankAccount", "private double balance;\n" +
-                        "\n" +
-                        "    public BankAccount(double balance) {\n" +
-                        "        this.balance = balance;\n" +
-                        "    }\n" +
-                        "\n" +
-                        "    public double getBalance() {\n" +
-                        "        return balance;\n" +
-                        "    }\n").build())
-                .setVisibility("public")
-                .setAffectedSmell()
-                .build();
-        classe.addMethodBeanList(metodo);
-
-        metodo = new MethodBean.Builder("promiscuous_package.package.BankAccount.getBalance", "return balance;")
-                .setReturnType(new ClassBean.Builder("double", "").build())
-                .setInstanceVariableList(instances)
-                .setMethodsCalls(vuota)
-                .setParameters(nulla)
-                .setStaticMethod(false)
-                .setDefaultCostructor(false)
-                .setBelongingClass(new ClassBean.Builder("promiscuous_package.package.BankAccount", "private double balance;\n" +
-                        "\n" +
-                        "    public BankAccount(double balance) {\n" +
-                        "        this.balance = balance;\n" +
-                        "    }\n" +
-                        "\n" +
-                        "    public double getBalance() {\n" +
-                        "        return balance;\n" +
-                        "    }\n").build())
-                .setVisibility("public")
-                .setAffectedSmell()
-                .build();
-        classe.addMethodBeanList(metodo);
-
-        instances = new InstanceVariableList();
-        instances.getList().add(new InstanceVariableBean("balance", "double", "", "private "));
-        methods = new MethodList();
-        classe = new ClassBean.Builder("promiscuous_package.package2.BankAccount", "private double balance;\n" +
-                "\n" +
-                "    public BankAccount(double balance) {\n" +
-                "        this.balance = balance;\n" +
-                "    }\n" +
-                "\n" +
-                "    public double getBalance() {\n" +
-                "        return balance;\n" +
-                "    }\n")
-                .setInstanceVariables(instances)
-                .setMethods(methods)
-                .setImports(new ArrayList<String>())
-                .setLOC(9)
-                .setSuperclass(null)
-                .setBelongingPackage(new PackageBean.Builder("promiscuous_package.package2", "public class BankAccount {\n" +
-                        "\n" +
-                        "    private double balance;\n" +
-                        "\n" +
-                        "    public BankAccount(double balance) {\n" +
-                        "        this.balance = balance;\n" +
-                        "    }\n" +
-                        "\n" +
-                        "    public double getBalance() {\n" +
-                        "        return balance;\n" +
-                        "    }\n" +
-                        "\n" +
-                        "}").build())
+                .setBelongingPackage(new PackageBean.Builder("promiscuous_package.package2", packageContent2).build())
                 .setEnviedPackage(null)
                 .setEntityClassUsage(1)
                 .setPathToFile("C:\\Users\\Simone\\Desktop\\IdeaProjects\\Code\\testData\\promiscuous_package\\package2\\")
@@ -562,15 +267,7 @@ public class StructuralPromiscuousPackageStrategyTest {
                 .setParameters(hash)
                 .setStaticMethod(false)
                 .setDefaultCostructor(true)
-                .setBelongingClass(new ClassBean.Builder("promiscuous_package.package2.BankAccount", "private double balance;\n" +
-                        "\n" +
-                        "    public BankAccount(double balance) {\n" +
-                        "        this.balance = balance;\n" +
-                        "    }\n" +
-                        "\n" +
-                        "    public double getBalance() {\n" +
-                        "        return balance;\n" +
-                        "    }\n").build())
+                .setBelongingClass(new ClassBean.Builder("promiscuous_package.package2.BankAccount", classBankAccount).build())
                 .setVisibility("public")
                 .setAffectedSmell()
                 .build();
@@ -583,15 +280,7 @@ public class StructuralPromiscuousPackageStrategyTest {
                 .setParameters(nulla)
                 .setStaticMethod(false)
                 .setDefaultCostructor(false)
-                .setBelongingClass(new ClassBean.Builder("promiscuous_package.package2.BankAccount", "private double balance;\n" +
-                        "\n" +
-                        "    public BankAccount(double balance) {\n" +
-                        "        this.balance = balance;\n" +
-                        "    }\n" +
-                        "\n" +
-                        "    public double getBalance() {\n" +
-                        "        return balance;\n" +
-                        "    }\n").build())
+                .setBelongingClass(new ClassBean.Builder("promiscuous_package.package2.BankAccount", classBankAccount).build())
                 .setVisibility("public")
                 .setAffectedSmell()
                 .build();

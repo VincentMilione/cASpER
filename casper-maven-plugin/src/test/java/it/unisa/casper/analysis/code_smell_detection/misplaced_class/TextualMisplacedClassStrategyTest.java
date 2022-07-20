@@ -7,6 +7,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -21,71 +24,25 @@ public class TextualMisplacedClassStrategyTest {
     private ClassBean classe, smelly, noSmelly;
     private ClassBeanList classes;
     private PackageBean pack, packE;
+    private String path = "./src/test/input/textual/misplaced";
 
     @Before
-    public void setUp() {
+    public void setUp() throws IOException {
         String filename = System.getProperty("user.home") + File.separator + ".casper" + File.separator + "stopwordlist.txt";
         File stopwordlist = new File(filename);
         stopwordlist.delete();
         InstanceVariableBeanList instances = new InstanceVariableList();
 
+        String packageContent1 = new String (Files.readAllBytes(Paths.get(path+"/package1.txt")));
+        String packageContent2 = new String (Files.readAllBytes(Paths.get(path+"/package2.txt")));
+        String classMain = new String (Files.readAllBytes(Paths.get(path+"/Main.txt")));
+        String classPhone = new String (Files.readAllBytes(Paths.get(path+"/Phone.txt")));
+        String classRistorante = new String (Files.readAllBytes(Paths.get(path+"/Ristorante.txt")));
+        String classCliente = new String (Files.readAllBytes(Paths.get(path+"/Cliente.txt")));
+        String classGestione = new String (Files.readAllBytes(Paths.get(path+"/Gestione.txt")));
+
         classes = new ClassList();
-        packE = new PackageBean.Builder("misplaced_class.package", "public class Cliente {\n" +
-                "\n" +
-                "\tprivate String name;\n" +
-                "\tprivate int età;" +
-                "\tprivate String luogoDiNascita;\n" +
-                "\t\n" +
-                "\tpublic Cliente(String name, int età) {\n" +
-                "\t\tthis.name = name;\n" +
-                "\t\tthis.età = età;\n" +
-                "\t}\n" +
-                "\tpublic String getName() {\n" +
-                "\t\treturn name;\n" +
-                "\t}\n" +
-                "\tpublic int getEtà() {\n" +
-                "\t\treturn età;\n" +
-                "\t}\n" +
-                "\tpublic String setName(String name) {\n" +
-                "\t\tthis.name = name;\n" +
-                "\t}\n" +
-                "\tpublic int setEtà(int newEta) {\n" +
-                "\t\tthis.età = età;\n" +
-                "\t}\n" +
-                "\tpublic String getLuogo() {\n" +
-                "\t\treturn luogoDiNascita;\n" +
-                "\t}\n" +
-                "\tpublic String setLuogo(String luogoDiNascita) {\n" +
-                "\t\tthis.luogoDiNascita = luogoDiNascita;\n" +
-                "\t}\n" +
-                "\t}" +
-                "\n" +
-                "public class Gestione{" +
-                "\tpublic Cliente scorriListaClienti() {\n" +
-                "\t\t\n" +
-                "\t\tArrayList<Cliente> clienti= new ArrayList<Cliente>();\n" +
-                "\t\tCliente c= new Cliente(\"Lucia\",30);\n" +
-                "\t\tclienti.add(c);\n" +
-                "\t\tc= new Cliente(\"Ugo\",51,\"SA\");\n" +
-                "\t\tclienti.add(c);\n" +
-                "\t\tc= new Cliente(\"Maria\",16,\"MI\");\n" +
-                "\t\tclienti.add(c);\n" +
-                "\t\tc= new Cliente(\"Lucia\",20,\"MI\");\n" +
-                "\t\tclienti.add(c);\n" +
-                "\n" +
-                "\t\tint contatore=0;\n" +
-                "\n" +
-                "String concatenationLuohi=\"\";" +
-                "\t\tfor(int i=0;i<clienti.length;i++) {\n" +
-                "\t\t\tif(clienti.get(contatore).getEtà()<clienti.get(i).getEtà()){clienti.get(contatore).setEtà(0);" +
-                "contatore=i;}\n" +
-                "\t\t}\t\n" +
-                "\t\tfor(int i=0;i<clienti.length;i++) {\n" +
-                "\t\t\tif(clienti.get(contatore).getLuogo.equals(clienti.get(i).getLuogo())){concatenationLuohi+ =\" \"+ clienti.get(contatore).getLuogo();" +
-                "contatore=i;}\n" +
-                "\t\t}\t\n" +
-                "\t\treturn clienti.get(contatore).setLuogo(\"NA\");\n" +
-                "\t}}").setClassList(classes).build();
+        packE = new PackageBean.Builder("misplaced_class.package", packageContent1).setClassList(classes).build();
 
         instances.getList().add(new InstanceVariableBean("name", "String", "", "private "));
         instances.getList().add(new InstanceVariableBean("eta", "int", "", "private "));
@@ -93,93 +50,13 @@ public class TextualMisplacedClassStrategyTest {
         List<String> imports = new ArrayList<String>();
 
         methods = new MethodList();
-        classe = new ClassBean.Builder("misplaced_class.package.Cliente", "\tprivate String name;\n" +
-                "\tprivate int età;" +
-                "\tprivate String luogoDiNascita;\n" +
-                "\t\n" +
-                "\tpublic Cliente(String name, int età) {\n" +
-                "\t\tthis.name = name;\n" +
-                "\t\tthis.età = età;\n" +
-                "\t}\n" +
-                "\tpublic String getName() {\n" +
-                "\t\treturn name;\n" +
-                "\t}\n" +
-                "\tpublic int getEtà() {\n" +
-                "\t\treturn età;\n" +
-                "\t}\n" +
-                "\tpublic String setName(String name) {\n" +
-                "\t\tthis.name = name;\n" +
-                "\t}\n" +
-                "\tpublic int setEtà(int newEta) {\n" +
-                "\t\tthis.età = età;\n" +
-                "\t}\n" +
-                "\tpublic String getLuogo() {\n" +
-                "\t\treturn luogoDiNascita;\n" +
-                "\t}\n" +
-                "\tpublic String setLuogo(String luogoDiNascita) {\n" +
-                "\t\tthis.luogoDiNascita = luogoDiNascita;\n" +
-                "\t}")
+        classe = new ClassBean.Builder("misplaced_class.package.Cliente", classCliente)
                 .setInstanceVariables(instances)
                 .setMethods(methods)
                 .setImports(imports)
                 .setLOC(22)
                 .setSuperclass(null)
-                .setBelongingPackage(new PackageBean.Builder("misplaced_class.package", "public class Cliente {\n" +
-                        "\n" +
-                        "\tprivate String name;\n" +
-                        "\tprivate int età;" +
-                        "\tprivate String luogoDiNascita;\n" +
-                        "\t\n" +
-                        "\tpublic Cliente(String name, int età) {\n" +
-                        "\t\tthis.name = name;\n" +
-                        "\t\tthis.età = età;\n" +
-                        "\t}\n" +
-                        "\tpublic String getName() {\n" +
-                        "\t\treturn name;\n" +
-                        "\t}\n" +
-                        "\tpublic int getEtà() {\n" +
-                        "\t\treturn età;\n" +
-                        "\t}\n" +
-                        "\tpublic String setName(String name) {\n" +
-                        "\t\tthis.name = name;\n" +
-                        "\t}\n" +
-                        "\tpublic int setEtà(int newEta) {\n" +
-                        "\t\tthis.età = età;\n" +
-                        "\t}\n" +
-                        "\tpublic String getLuogo() {\n" +
-                        "\t\treturn luogoDiNascita;\n" +
-                        "\t}\n" +
-                        "\tpublic String setLuogo(String luogoDiNascita) {\n" +
-                        "\t\tthis.luogoDiNascita = luogoDiNascita;\n" +
-                        "\t}\n" +
-                        "\t}" +
-                        "\n" +
-                        "public class Gestione{" +
-                        "\tpublic Cliente scorriListaClienti() {\n" +
-                        "\t\t\n" +
-                        "\t\tArrayList<Cliente> clienti= new ArrayList<Cliente>();\n" +
-                        "\t\tCliente c= new Cliente(\"Lucia\",30);\n" +
-                        "\t\tclienti.add(c);\n" +
-                        "\t\tc= new Cliente(\"Ugo\",51,\"SA\");\n" +
-                        "\t\tclienti.add(c);\n" +
-                        "\t\tc= new Cliente(\"Maria\",16,\"MI\");\n" +
-                        "\t\tclienti.add(c);\n" +
-                        "\t\tc= new Cliente(\"Lucia\",20,\"MI\");\n" +
-                        "\t\tclienti.add(c);\n" +
-                        "\n" +
-                        "\t\tint contatore=0;\n" +
-                        "\n" +
-                        "String concatenationLuohi=\"\";" +
-                        "\t\tfor(int i=0;i<clienti.length;i++) {\n" +
-                        "\t\t\tif(clienti.get(contatore).getEtà()<clienti.get(i).getEtà()){clienti.get(contatore).setEtà(0);" +
-                        "contatore=i;}\n" +
-                        "\t\t}\t\n" +
-                        "\t\tfor(int i=0;i<clienti.length;i++) {\n" +
-                        "\t\t\tif(clienti.get(contatore).getLuogo.equals(clienti.get(i).getLuogo())){concatenationLuohi+ =\" \"+ clienti.get(contatore).getLuogo();" +
-                        "contatore=i;}\n" +
-                        "\t\t}\t\n" +
-                        "\t\treturn clienti.get(contatore).setLuogo(\"NA\");\n" +
-                        "\t}}").build())
+                .setBelongingPackage(new PackageBean.Builder("misplaced_class.package", packageContent1).build())
                 .setEnviedPackage(null)
                 .setEntityClassUsage(3)
                 .setPathToFile("C:\\Users\\Simone\\Desktop\\IdeaProjects\\Code\\testData\\misplaced_class\\package")
@@ -187,90 +64,13 @@ public class TextualMisplacedClassStrategyTest {
                 .build();
         packE.addClassList(classe);
 
-        noSmelly = new ClassBean.Builder("misplaced_class.package.Gestione", "ArrayList<Cliente> clienti= new ArrayList<Cliente>();\n" +
-                "\t\tCliente c= new Cliente(\"Lucia\",30);\n" +
-                "\t\tclienti.add(c);\n" +
-                "\t\tc= new Cliente(\"Ugo\",51,\"SA\");\n" +
-                "\t\tclienti.add(c);\n" +
-                "\t\tc= new Cliente(\"Maria\",16,\"MI\");\n" +
-                "\t\tclienti.add(c);\n" +
-                "\t\tc= new Cliente(\"Lucia\",20,\"MI\");\n" +
-                "\t\tclienti.add(c);\n" +
-                "\n" +
-                "\t\tint contatore=0;\n" +
-                "\n" +
-                "String concatenationLuohi=\"\";" +
-                "\t\tfor(int i=0;i<clienti.length;i++) {\n" +
-                "\t\t\tif(clienti.get(contatore).getEtà()<clienti.get(i).getEtà()){clienti.get(contatore).setEtà(0);" +
-                "contatore=i;}\n" +
-                "\t\t}\t\n" +
-                "\t\tfor(int i=0;i<clienti.length;i++) {\n" +
-                "\t\t\tif(clienti.get(contatore).getLuogo.equals(clienti.get(i).getLuogo())){concatenationLuohi+ =\" \"+ clienti.get(contatore).getLuogo();" +
-                "contatore=i;}\n" +
-                "\t\t}\t\n" +
-                "\t\treturn clienti.get(contatore).setLuogo(\"NA\");\n" +
-                "\t}}")
+        noSmelly = new ClassBean.Builder("misplaced_class.package.Gestione", classGestione)
                 .setInstanceVariables(instances)
                 .setMethods(methods)
                 .setImports(new ArrayList<>())
                 .setLOC(18)
                 .setSuperclass(null)
-                .setBelongingPackage(new PackageBean.Builder("misplaced_class.package2", "public class Cliente {\n" +
-                        "\n" +
-                        "\tprivate String name;\n" +
-                        "\tprivate int età;" +
-                        "\tprivate String luogoDiNascita;\n" +
-                        "\t\n" +
-                        "\tpublic Cliente(String name, int età) {\n" +
-                        "\t\tthis.name = name;\n" +
-                        "\t\tthis.età = età;\n" +
-                        "\t}\n" +
-                        "\tpublic String getName() {\n" +
-                        "\t\treturn name;\n" +
-                        "\t}\n" +
-                        "\tpublic int getEtà() {\n" +
-                        "\t\treturn età;\n" +
-                        "\t}\n" +
-                        "\tpublic String setName(String name) {\n" +
-                        "\t\tthis.name = name;\n" +
-                        "\t}\n" +
-                        "\tpublic int setEtà(int newEta) {\n" +
-                        "\t\tthis.età = età;\n" +
-                        "\t}\n" +
-                        "\tpublic String getLuogo() {\n" +
-                        "\t\treturn luogoDiNascita;\n" +
-                        "\t}\n" +
-                        "\tpublic String setLuogo(String luogoDiNascita) {\n" +
-                        "\t\tthis.luogoDiNascita = luogoDiNascita;\n" +
-                        "\t}\n" +
-                        "\t}" +
-                        "\n" +
-                        "public class Gestione{" +
-                        "\tpublic Cliente scorriListaClienti() {\n" +
-                        "\t\t\n" +
-                        "\t\tArrayList<Cliente> clienti= new ArrayList<Cliente>();\n" +
-                        "\t\tCliente c= new Cliente(\"Lucia\",30);\n" +
-                        "\t\tclienti.add(c);\n" +
-                        "\t\tc= new Cliente(\"Ugo\",51,\"SA\");\n" +
-                        "\t\tclienti.add(c);\n" +
-                        "\t\tc= new Cliente(\"Maria\",16,\"MI\");\n" +
-                        "\t\tclienti.add(c);\n" +
-                        "\t\tc= new Cliente(\"Lucia\",20,\"MI\");\n" +
-                        "\t\tclienti.add(c);\n" +
-                        "\n" +
-                        "\t\tint contatore=0;\n" +
-                        "\n" +
-                        "String concatenationLuohi=\"\";" +
-                        "\t\tfor(int i=0;i<clienti.length;i++) {\n" +
-                        "\t\t\tif(clienti.get(contatore).getEtà()<clienti.get(i).getEtà()){clienti.get(contatore).setEtà(0);" +
-                        "contatore=i;}\n" +
-                        "\t\t}\t\n" +
-                        "\t\tfor(int i=0;i<clienti.length;i++) {\n" +
-                        "\t\t\tif(clienti.get(contatore).getLuogo.equals(clienti.get(i).getLuogo())){concatenationLuohi+ =\" \"+ clienti.get(contatore).getLuogo();" +
-                        "contatore=i;}\n" +
-                        "\t\t}\t\n" +
-                        "\t\treturn clienti.get(contatore).setLuogo(\"NA\");\n" +
-                        "\t}}").build())
+                .setBelongingPackage(new PackageBean.Builder("misplaced_class.package", packageContent1).build())
                 .setEnviedPackage(null)
                 .setEntityClassUsage(0)
                 .setPathToFile("C:\\Users\\Simone\\Desktop\\IdeaProjects\\Code\\testData\\misplaced_class\\package")
@@ -282,94 +82,15 @@ public class TextualMisplacedClassStrategyTest {
 
         methods = new MethodList();
         classes = new ClassList();
-        pack = new PackageBean.Builder("misplaced_class.package2", "private Gestione gestore" +
-                "\n\tstatic void main(){" +
-                "\t\tCliente c = new Cliente(\"\",20);" +
-                "\t\tc = gestore.scorriListaClienti();" +
-                "\t\tSystem.out.println(c.getName+\" \"+c.getEtà());)" +
-                "\t\tc = gestore.scorriListaClienti();" +
-                "\t\tSystem.out.println(c.getName+\" \"+c.getEtà());)" +
-                "\t\tc = gestore.scorriListaClienti();" +
-                "\t\tSystem.out.println(c.getName+\" \"+c.getEtà());)" +
-                "\t}" +
-                "private final String unformattedNumber;\n" +
-                "   public Phone(String unformattedNumber) {\n" +
-                "      this.unformattedNumber = unformattedNumber;\n" +
-                "   }\n" +
-                "   public String getAreaCode() {\n" +
-                "      return unformattedNumber.substring(0,3);\n" +
-                "   }\n" +
-                "   public String getPrefix() {\n" +
-                "      return unformattedNumber.substring(3,6);\n" +
-                "   }\n" +
-                "   public String getNumber() {\n" +
-                "      return unformattedNumber.substring(6,10);\n" +
-                "   }" +
-                "public String nome_Ristorante;\n" +
-                "\n" +
-                "\tpublic Ristorante(String nome_Ristorante) {\n" +
-                "\t\tthis.nome_Ristorante = nome_Ristorante;\n" +
-                "\t}\n" +
-                "\n" +
-                "\tpublic String getNome_Ristorante() {\n" +
-                "\t\treturn nome_Ristorante;\n" +
-                "\t}\n" +
-                "\n" +
-                "\tpublic void setNome_Ristorante(String nome_Ristorante) {\n" +
-                "\t\tthis.nome_Ristorante = nome_Ristorante;\n" +
-                "\t}").setClassList(classes).build();
+        pack = new PackageBean.Builder("misplaced_class.package2", packageContent2).setClassList(classes).build();
 
-        smelly = new ClassBean.Builder("misplaced_class.package2.Main", "private Gestione gestore" +
-                "\n\tstatic void main(){" +
-                "\t\tCliente c = new Cliente(\"\",20);" +
-                "\t\tc = gestore.scorriListaClienti();" +
-                "\t\tSystem.out.println(c.getName+\" \"+c.getEtà());)" +
-                "\t\tc = gestore.scorriListaClienti();" +
-                "\t\tSystem.out.println(c.getName+\" \"+c.getEtà());)" +
-                "\t\tc = gestore.scorriListaClienti();" +
-                "\t\tSystem.out.println(c.getName+\" \"+c.getEtà());)" +
-                "\t}")
+        smelly = new ClassBean.Builder("misplaced_class.package2.Main", classMain)
                 .setInstanceVariables(new InstanceVariableList())
                 .setMethods(methods)
                 .setImports(new ArrayList<String>())
                 .setLOC(8)
                 .setSuperclass(null)
-                .setBelongingPackage(new PackageBean.Builder("misplaced_class.package2", "private Gestione gestore" +
-                        "\n\tstatic void main(){" +
-                        "\t\tCliente c = new Cliente(\"\",20);" +
-                        "\t\tc = gestore.scorriListaClienti();" +
-                        "\t\tSystem.out.println(c.getName+\" \"+c.getEtà());)" +
-                        "\t\tc = gestore.scorriListaClienti();" +
-                        "\t\tSystem.out.println(c.getName+\" \"+c.getEtà());)" +
-                        "\t\tc = gestore.scorriListaClienti();" +
-                        "\t\tSystem.out.println(c.getName+\" \"+c.getEtà());)" +
-                        "\t}" +
-                        "private final String unformattedNumber;\n" +
-                        "   public Phone(String unformattedNumber) {\n" +
-                        "      this.unformattedNumber = unformattedNumber;\n" +
-                        "   }\n" +
-                        "   public String getAreaCode() {\n" +
-                        "      return unformattedNumber.substring(0,3);\n" +
-                        "   }\n" +
-                        "   public String getPrefix() {\n" +
-                        "      return unformattedNumber.substring(3,6);\n" +
-                        "   }\n" +
-                        "   public String getNumber() {\n" +
-                        "      return unformattedNumber.substring(6,10);\n" +
-                        "   }" +
-                        "public String nome_Ristorante;\n" +
-                        "\n" +
-                        "\tpublic Ristorante(String nome_Ristorante) {\n" +
-                        "\t\tthis.nome_Ristorante = nome_Ristorante;\n" +
-                        "\t}\n" +
-                        "\n" +
-                        "\tpublic String getNome_Ristorante() {\n" +
-                        "\t\treturn nome_Ristorante;\n" +
-                        "\t}\n" +
-                        "\n" +
-                        "\tpublic void setNome_Ristorante(String nome_Ristorante) {\n" +
-                        "\t\tthis.nome_Ristorante = nome_Ristorante;\n" +
-                        "\t}").build())
+                .setBelongingPackage(new PackageBean.Builder("misplaced_class.package2", packageContent2).build())
                 .setEnviedPackage(packE)
                 .setEntityClassUsage(1)
                 .setPathToFile("C:\\Users\\Simone\\Desktop\\IdeaProjects\\Code\\testData\\misplaced_class\\package2")
@@ -380,60 +101,13 @@ public class TextualMisplacedClassStrategyTest {
         instances = new InstanceVariableList();
         methods = new MethodList();
 
-        classe = new ClassBean.Builder("misplaced_class.package2.Phone", "private final String unformattedNumber;\n" +
-                "   public Phone(String unformattedNumber) {\n" +
-                "      this.unformattedNumber = unformattedNumber;\n" +
-                "   }\n" +
-                "   public String getAreaCode() {\n" +
-                "      return unformattedNumber.substring(0,3);\n" +
-                "   }\n" +
-                "   public String getPrefix() {\n" +
-                "      return unformattedNumber.substring(3,6);\n" +
-                "   }\n" +
-                "   public String getNumber() {\n" +
-                "      return unformattedNumber.substring(6,10);\n" +
-                "   }")
+        classe = new ClassBean.Builder("misplaced_class.package2.Phone", classPhone)
                 .setInstanceVariables(instances)
                 .setMethods(methods)
                 .setImports(new ArrayList<String>())
                 .setLOC(11)
                 .setSuperclass(null)
-                .setBelongingPackage(new PackageBean.Builder("misplaced_class.package2", "private Gestione gestore" +
-                        "\n\tstatic void main(){" +
-                        "\t\tCliente c = new Cliente(\"\",20);" +
-                        "\t\tc = gestore.scorriListaClienti();" +
-                        "\t\tSystem.out.println(c.getName+\" \"+c.getEtà());)" +
-                        "\t\tc = gestore.scorriListaClienti();" +
-                        "\t\tSystem.out.println(c.getName+\" \"+c.getEtà());)" +
-                        "\t\tc = gestore.scorriListaClienti();" +
-                        "\t\tSystem.out.println(c.getName+\" \"+c.getEtà());)" +
-                        "\t}" +
-                        "private final String unformattedNumber;\n" +
-                        "   public Phone(String unformattedNumber) {\n" +
-                        "      this.unformattedNumber = unformattedNumber;\n" +
-                        "   }\n" +
-                        "   public String getAreaCode() {\n" +
-                        "      return unformattedNumber.substring(0,3);\n" +
-                        "   }\n" +
-                        "   public String getPrefix() {\n" +
-                        "      return unformattedNumber.substring(3,6);\n" +
-                        "   }\n" +
-                        "   public String getNumber() {\n" +
-                        "      return unformattedNumber.substring(6,10);\n" +
-                        "   }" +
-                        "public String nome_Ristorante;\n" +
-                        "\n" +
-                        "\tpublic Ristorante(String nome_Ristorante) {\n" +
-                        "\t\tthis.nome_Ristorante = nome_Ristorante;\n" +
-                        "\t}\n" +
-                        "\n" +
-                        "\tpublic String getNome_Ristorante() {\n" +
-                        "\t\treturn nome_Ristorante;\n" +
-                        "\t}\n" +
-                        "\n" +
-                        "\tpublic void setNome_Ristorante(String nome_Ristorante) {\n" +
-                        "\t\tthis.nome_Ristorante = nome_Ristorante;\n" +
-                        "\t}").build())
+                .setBelongingPackage(new PackageBean.Builder("misplaced_class.package2", packageContent2).build())
                 .setEnviedPackage(null)
                 .setEntityClassUsage(3)
                 .setPathToFile("C:\\Users\\Simone\\Desktop\\IdeaProjects\\Code\\testData\\misplaced_class\\package2")
@@ -441,60 +115,13 @@ public class TextualMisplacedClassStrategyTest {
                 .build();
         pack.addClassList(classe);
 
-        classe = new ClassBean.Builder("misplaced_class.package2.Ristorante", "public String nome_Ristorante;\n" +
-                "\n" +
-                "\tpublic Ristorante(String nome_Ristorante) {\n" +
-                "\t\tthis.nome_Ristorante = nome_Ristorante;\n" +
-                "\t}\n" +
-                "\n" +
-                "\tpublic String getNome_Ristorante() {\n" +
-                "\t\treturn nome_Ristorante;\n" +
-                "\t}\n" +
-                "\n" +
-                "\tpublic void setNome_Ristorante(String nome_Ristorante) {\n" +
-                "\t\tthis.nome_Ristorante = nome_Ristorante;\n" +
-                "\t}")
+        classe = new ClassBean.Builder("misplaced_class.package2.Ristorante", classRistorante)
                 .setInstanceVariables(instances)
                 .setMethods(methods)
                 .setImports(new ArrayList<String>())
                 .setLOC(12)
                 .setSuperclass(null)
-                .setBelongingPackage(new PackageBean.Builder("misplaced_class.package2", "private Gestione gestore" +
-                        "\n\tstatic void main(){" +
-                        "\t\tCliente c = new Cliente(\"\",20);" +
-                        "\t\tc = gestore.scorriListaClienti();" +
-                        "\t\tSystem.out.println(c.getName+\" \"+c.getEtà());)" +
-                        "\t\tc = gestore.scorriListaClienti();" +
-                        "\t\tSystem.out.println(c.getName+\" \"+c.getEtà());)" +
-                        "\t\tc = gestore.scorriListaClienti();" +
-                        "\t\tSystem.out.println(c.getName+\" \"+c.getEtà());)" +
-                        "\t}" +
-                        "private final String unformattedNumber;\n" +
-                        "   public Phone(String unformattedNumber) {\n" +
-                        "      this.unformattedNumber = unformattedNumber;\n" +
-                        "   }\n" +
-                        "   public String getAreaCode() {\n" +
-                        "      return unformattedNumber.substring(0,3);\n" +
-                        "   }\n" +
-                        "   public String getPrefix() {\n" +
-                        "      return unformattedNumber.substring(3,6);\n" +
-                        "   }\n" +
-                        "   public String getNumber() {\n" +
-                        "      return unformattedNumber.substring(6,10);\n" +
-                        "   }" +
-                        "public String nome_Ristorante;\n" +
-                        "\n" +
-                        "\tpublic Ristorante(String nome_Ristorante) {\n" +
-                        "\t\tthis.nome_Ristorante = nome_Ristorante;\n" +
-                        "\t}\n" +
-                        "\n" +
-                        "\tpublic String getNome_Ristorante() {\n" +
-                        "\t\treturn nome_Ristorante;\n" +
-                        "\t}\n" +
-                        "\n" +
-                        "\tpublic void setNome_Ristorante(String nome_Ristorante) {\n" +
-                        "\t\tthis.nome_Ristorante = nome_Ristorante;\n" +
-                        "\t}").build())
+                .setBelongingPackage(new PackageBean.Builder("misplaced_class.package2", packageContent2).build())
                 .setEnviedPackage(null)
                 .setEntityClassUsage(2)
                 .setPathToFile("C:\\Users\\Simone\\Desktop\\IdeaProjects\\Code\\testData\\misplaced_class\\package2")

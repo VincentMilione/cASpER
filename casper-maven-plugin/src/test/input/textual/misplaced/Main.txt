@@ -1,0 +1,2 @@
+private Gestione gestore
+	static void main(){		Cliente c = new Cliente("",20);		c = gestore.scorriListaClienti();		System.out.println(c.getName+" "+c.getEtà());)		c = gestore.scorriListaClienti();		System.out.println(c.getName+" "+c.getEtà());)		c = gestore.scorriListaClienti();		System.out.println(c.getName+" "+c.getEtà());)	}
