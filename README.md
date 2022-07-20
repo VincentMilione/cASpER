@@ -1,25 +1,48 @@
-## How to install manually
+cASpER was originally an Intellij plugin used to detect and automatically refactor certain code smells. The proposed version is 
+a reengineered version of the original that works as Maven plugin. At the current stage, the cASpER Maven plugin version only holds the ability to 
+detect the four original code smells it set out to detect and automatically refactor:
+- `Blob`
+- `Misplaced class` 
+- `Promiscuos Package`
+- `Feature Envy`
 
-To be able to install cASpER it is essential to have on your device:
+## How to install cASpER Maven plugin
 
-  1. IntelliJ IDEA (starting from version 2019.1.3)
-    
-  2. the .zip file of the plug-in, downloadable from GitHub from the following link: https://github.com/simgam/cASpER/tree/master/Code/build/distributions/casper-1.0-SNAPSHOT.zip
+To use cASpER it is essential to have on your device Maven 3.8.3 and insert the following plugin configuration 
+in your project pom.xml:
+   
 
-Once the preparations are complete, open the Settings console (via the "File" menu or Ctlr + Alt + s shortcut) and select the "Plugins" sub-item.
+```
+	<plugin>
+            <groupId>com.iges.project</groupId>
+            <artifactId>casper-maven-plugin</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <configuration>
+                <dump></dump>
+                <textContent>true</textContent>
+                <dependency>
+                    <dipPromiscuous>50</dipPromiscuous>
+                    <dipPromiscuous2>50</dipPromiscuous2>
+                    <dipFeature>0</dipFeature>
+                    <dipMisplaced>0</dipMisplaced>
+                    <dipBlob>350</dipBlob>
+                    <dipBlob2>20</dipBlob2>
+                    <dipBlob3>500</dipBlob3>
+                </dependency>
+                <cosine>
+                    <cosenoPromiscuous>0.5</cosenoPromiscuous>
+                    <cosenoFeature>0.0</cosenoFeature>
+                    <cosenoMisplaced>0.0</cosenoMisplaced>
+                    <cosenoBlob>0.5</cosenoBlob>
+                </cosine>
+            </configuration>
+        </plugin>
+```
 
-Select, as shown in Figure figure: Settings Screen, the "Install Plugin from Disk" item and search for the .zip file of the plug-in. Click OK to apply the changes and restart the IDE, if required, to complete the ASCETIC installation. If the process has been successful, returning to the control window, the tool among the installed plug-ins will be visible in the "Plugins" menu.
-
-Once the installation is complete, the cASpER- Analyze Project section will appear in the drop-down menu of the tools, providing the user with the possibility to access the plug-in functions using the appropriate items.
-
-## How to install via Jetbrains store
-
-cASpER can be installed through the official store. As a first step you need to open the settings panel and access the plugins store. Then select and search for this plugin under "cASpER".
-
+The dump variable accepts a filename and when specified allows to dump what would normally be printed on the sout in a file with the filename specified.
+textContent variable is a boolean flag that when set to true tells the plugin to dump also the text content of a smelly component.
+the dependency and cosine maps hold the thresholds the detection algorithms have to match (or surpass) to dictate that a component is affected by a certain smell. At present, it is necessary to specify them all.
 ## How to see the source code
 
-To view the open source code, download the .zip file from this repository. Open the project by accessing the "Code" subfolder and selecting "java" as the source foulder.
-If not present, it is also necessary to define the startup configuration to compile the plugin. Then create a gradle run configuration and enter the following values in the appropriate fields:
-
-  1. :runIde in the "task" chapter
-  2. -stacktrace in the "arguments" field
+To view the open source code, download the .zip file from this repository. Open the project by accessing the "casper-maven-plugin" subfolder as a Maven Project and selecting "java" as the source foulder.
+To try and execute in a local environment you must again install the plugin via the command "mvn install -DskipTests"
