@@ -82,11 +82,14 @@ public class AnalysisStartup {
     private static String priorityTextual(String smellName, double soglia, double cosEff) {
         int complessita = 1, alto = 0;
         boolean basso = false;
+        double cos = 0;
+        soglia = 0;
 
         if (cosEff >= 0.75) alto++;
-        if (cosEff >= soglia + (0.1 * soglia))
+        if (cosEff < soglia + (soglia * 0.10))
+            basso = true;
+        if (cos >= soglia + (soglia * 0.10))
             complessita += 2;
-        else basso = true;
 
         return prioritySmell(complessita, basso, alto);
     }
